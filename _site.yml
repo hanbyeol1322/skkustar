@@ -7,13 +7,13 @@ navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "Portfolio"      # add
-      href: portfolio.html   # add
-    - icon: fab fa-github    # try
+    - text: "Portfolio"      
+      href: Portfolio.html   
+    - icon: fab fa-github    
       href: https://github.com/your-id 
-    - icon: fab fa-linkedin-in #try  
+    - icon: fab fa-linkedin-in   
       href: https://www.linkedin.com/in/your-account/ 
     - text: "About"
       href: about.html
-output:
-  postcards::trestles
+output: distill::distill_article
+---
