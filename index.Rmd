@@ -1,26 +1,19 @@
 ---
-title: "HANBYEOL"
+title: "star"
 image: "크기조정.png"
 links:
-  - label: GitHub
-    url: "https://github.com/your_id"
   - label: LinkedIn
-    url: "https://www.linkedin.com/in/your_id/"
+    url: "https://linkedin.com/"
+  - label: Twitter
+    url: "https://twitter.com/"
+  - label: GitHub
+    url: "https://github.com/"
   - label: Email
-    url: "mailto:youremail@gmail.com"
-description: |
- hi Welcome to the website. I hope you enjoy it!
-site: distill::distill_website
+    url: "mailto:email@email.com"
+output:
+  postcards::trestles
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
-
-# Learn more about publishing to GitHub Pages at:
-# https://rstudio.github.io/distill/publish_website.html#github-pages
-
-```
-
+ 
+I am a classically trained data scientist living in the San Francisco Bay Area. 
+Currently I work on the Oculus team at Facebook. I love talking about baseball, 
+true crime podcasts, and causal inference.
