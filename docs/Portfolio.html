@@ -85,26 +85,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>STAR: 20-1</title>
+  <title>★: 보험금융투자론</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="STAR: 20-1"/>
+  <meta property="og:title" content="★: 보험금융투자론"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="STAR"/>
+  <meta property="og:site_name" content="★"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="STAR: 20-1"/>
+  <meta property="twitter:title" content="★: 보험금융투자론"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["20-1"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["보험금융투자론"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2049,7 +2049,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"20-1","authors":[]}
+{"title":"보험금융투자론","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2057,7 +2057,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
-<a href="index.html" class="title">STAR</a>
+<a href="index.html" class="title">★</a>
+<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
 </div>
 <div class="nav-right">
 <a href="index.html">Home</a>
@@ -2072,7 +2073,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>20-1</h1>
+<h1>보험금융투자론</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2080,29 +2081,36 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
 <div class="d-article">
-<h2 id="chooser-option">chooser option</h2>
-<p>#chooser option factors S0 &lt;- 100 K &lt;- 100</p>
+<h1 id="chooser-option-pay-off-r-code">chooser option pay-off R code</h1>
+<h3 id="chooser-option-factors">1. chooser option factors</h3>
+<p>S0 &lt;- 100 K &lt;- 100</p>
 <p>s &lt;- 1000 interval &lt;- 500</p>
 <p>T_t &lt;- 0.7/(interval) t &lt;- 0.3 r &lt;-0.03 sigma &lt;- 0.5 mu &lt;- r-(0.5*sigma^2)</p>
 <p>set.seed(1234)</p>
-<p>#random number rnd.num &lt;- as.data.frame(matrix(rnorm(s*interval), nrow=s, ncol=interval))</p>
-<p>#누적 수익률 만들기 xx &lt;- as.data.frame(matrix(data=0, nrow=s, ncol=interval+1))</p>
+<h3 id="random-number">2. random number</h3>
+<p>rnd.num &lt;- as.data.frame(matrix(rnorm(s*interval), nrow=s, ncol=interval))</p>
+<h3 id="누적-수익률-만들기">3. 누적 수익률 만들기</h3>
+<p>xx &lt;- as.data.frame(matrix(data=0, nrow=s, ncol=interval+1))</p>
 <p>for ( i in 1:s){ for ( j in 1:interval){</p>
 <pre><code>xx[i,j+1] &lt;- xx[i,j] + (mu*(T_t)+(sigma*sqrt(T_t)*rnd.num[i,j]))  </code></pre>
 <p>}</p>
 <p>}</p>
-<p>#t시점에서 option의 가치 result &lt;- matrix(NA, s, 1)</p>
+<h3 id="t시점에서-option의-가치">4. t시점에서 option의 가치</h3>
+<p>result &lt;- matrix(NA, s, 1)</p>
 <p>for (i in 1:s){ result[i,1] &lt;- (max(0, S0<em>exp(xx[i,151])-K</em>exp(-r<em>0.7),max(0, K</em>exp(-r<em>0.7)-S0</em>exp(xx[i,151]))))</p>
 <p>}</p>
 <p>payoff &lt;- result ST &lt;- matrix(S0*exp(xx[,150])) plot(ST, payoff)</p>
 <p>mean(result[1:s,1])</p>
 <p>plot(x=seq(1,500,1), y=xx[999, 2:501], type=“l”, xlab = “interval”, ylab = “Yield”, main = “999th Stock Price”) #plot(x &lt;- sort(rnorm(47)), type = “s”, main = “plot(x, type = "s")”) #points(x, cex = .5, col = “dark red”)</p>
-<p>#블랙숄즈 공식과 비교, t시점에서 option의 가치 chooser_option &lt;- function(s, k, r, T, t, sigma){ d1 &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>T)/(sigma<em>sqrt(T)) d2 &lt;- d1-sigma</em>sqrt(T) d1_c &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>t)/(sigma<em>sqrt(t)) d2_c &lt;- d1_c-sigma</em>sqrt(t) value &lt;- s<em>pnorm(d1)-k</em>exp(-r<em>T)</em>pnorm(d2)-s<em>pnorm(-d1_c)+k</em>exp(-r<em>T)</em>pnorm(-d2_c) return(value) }</p>
+<h3 id="블랙숄즈-공식과-비교-t시점에서-option의-가치">5. 블랙숄즈 공식과 비교, t시점에서 option의 가치</h3>
+<p>chooser_option &lt;- function(s, k, r, T, t, sigma){ d1 &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>T)/(sigma<em>sqrt(T)) d2 &lt;- d1-sigma</em>sqrt(T) d1_c &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>t)/(sigma<em>sqrt(t)) d2_c &lt;- d1_c-sigma</em>sqrt(t) value &lt;- s<em>pnorm(d1)-k</em>exp(-r<em>T)</em>pnorm(d2)-s<em>pnorm(-d1_c)+k</em>exp(-r<em>T)</em>pnorm(-d2_c) return(value) }</p>
 <p>chooser_option(100, 100, 0.03, 1, 0.3, 0.2)</p>
-<p>#call calloption &lt;- function(s, k, r, T, sigma){ d1 &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>T)/(sigma<em>sqrt(T)) d2 &lt;- d1-sigma</em>sqrt(T) value &lt;- s<em>pnorm(d1)-k</em>exp(-r<em>T)</em>pnorm(d2) return(value)</p>
+<h3 id="참고-call">참고: call</h3>
+<p>calloption &lt;- function(s, k, r, T, sigma){ d1 &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>T)/(sigma<em>sqrt(T)) d2 &lt;- d1-sigma</em>sqrt(T) value &lt;- s<em>pnorm(d1)-k</em>exp(-r<em>T)</em>pnorm(d2) return(value)</p>
 <p>}</p>
 <p>calloption(100, 100, 0.03, 1, 0.2)</p>
-<p>#put putoption &lt;- function(s, k, r, T, sigma){ d1 &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>T)/(sigma<em>sqrt(T)) d2 &lt;- d1-sigma</em>sqrt(T) value &lt;- k<em>exp(-r</em>T)<em>pnorm(-d2)-s</em>pnorm(-d1) return(value)</p>
+<h3 id="참고-put">참고: put</h3>
+<p>putoption &lt;- function(s, k, r, T, sigma){ d1 &lt;- (log(s/k)+(r+0.5<em>sigma^2)</em>T)/(sigma<em>sqrt(T)) d2 &lt;- d1-sigma</em>sqrt(T) value &lt;- k<em>exp(-r</em>T)<em>pnorm(-d2)-s</em>pnorm(-d1) return(value)</p>
 <p>}</p>
 <p>putoption(100, 100, 0.03, 1, 0.2)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
