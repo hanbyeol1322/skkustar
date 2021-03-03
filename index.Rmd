@@ -1,18 +1,16 @@
 ---
-title: "star"
-image: "크기조정.png"
+title: "HANBYEOL"
+image: "프사.jpg"
 links:
-  - label: LinkedIn
-    url: "https://linkedin.com/"
   - label: facebook
     url: "https://twitter.com/"
   - label: GitHub
     url: "https://github.com/"
   - label: Email
-    url: "mailto:email@email.com"
+    url: "mailto:hanbyeol1322@gmail.com"
 site: distill::distill_website
 output:
-  postcards::trestles
+  postcards::jolla
 ---
 # title
 
