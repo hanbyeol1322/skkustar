@@ -1,0 +1,20 @@
+---
+title: "응용통계학 lec2"
+description: |
+  ggplot!!!!
+author:
+  - name: hanbyeol
+date: 03-07-2021
+always_allow_html: true
+base_url:  https://hanbyeol1322.github.io/skkustar/
+output:
+  distill::distill_article:
+    self_contained: false
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
