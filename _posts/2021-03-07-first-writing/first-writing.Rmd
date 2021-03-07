@@ -14,10 +14,6 @@ draft: false
 ---
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
 
 # chooser option pay-off R code
 
