@@ -10,5 +10,5 @@ site: distill::distill_website
 output:
   postcards::jolla
 ---
-### SKKU 응용통계학
+### SKKU 응용통계학!
 
