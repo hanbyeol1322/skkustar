@@ -1,4 +1,4 @@
 ---
-title: "Blog_posts"
+title: "Blog posts"
 listing: posts
 ---
