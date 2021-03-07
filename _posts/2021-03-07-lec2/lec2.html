@@ -1494,7 +1494,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
         filter(species %in% c(&quot;Chinstrap&quot;,&quot;Adelie&quot;))
     penguins %&gt;%
         filter(species %in% c(&quot;Chinstrap&quot;,&quot;Adelie&quot;),island==&quot;dream&quot;)</code></pre>
-<h3 id="q.adelie이거나-gentoo이면서-bill-lenth가-30에서-100-사이인-것은-a.filter사용시">- Q.Adelie이거나 Gentoo이면서 bill lenth가 30에서 100 사이인 것은? #### A.filter사용시</h3>
+<h3 id="q.adelie이거나-gentoo이면서-bill-lenth가-30에서-100-사이인-것은">- Q.Adelie이거나 Gentoo이면서 bill lenth가 30에서 100 사이인 것은?</h3>
+<h4 id="a.filter사용시">A.filter사용시</h4>
 <pre><code>    penguins %&gt;% 
         filter(species %in% c(&quot;Adelie&quot;,&quot;Gentoo&quot;),
                bill_length_mm&gt;30 &amp; bill_length_mm&lt;100) %&gt;% 

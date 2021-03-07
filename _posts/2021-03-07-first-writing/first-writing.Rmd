@@ -13,8 +13,6 @@ output:
 draft: false
 ---
 
-
-
 # chooser option pay-off R code
 
 ### 1. chooser option factors

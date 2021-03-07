@@ -42,7 +42,9 @@ knitr::opts_chunk$set(echo = FALSE)
     penguins %>%
         filter(species %in% c("Chinstrap","Adelie"),island=="dream")
 ```
-### - Q.Adelie이거나 Gentoo이면서 bill lenth가 30에서 100 사이인 것은? #### A.filter사용시
+### - Q.Adelie이거나 Gentoo이면서 bill lenth가 30에서 100 사이인 것은?
+
+#### A.filter사용시
 ```
     penguins %>% 
         filter(species %in% c("Adelie","Gentoo"),
