@@ -1,9 +1,16 @@
 ---
-title: "보험금융투자론"
+title: "Portfolio"
+listing: 
+  posts:
+    -보험금융투자론(chooser option)
+    -응용통계학lec1
+    -응용통계학lec2
 ---
+
 # chooser option pay-off R code
 
 ### 1. chooser option factors
+```
 S0 <- 100
 K <- 100
 
@@ -17,25 +24,28 @@ sigma <- 0.5
 mu <- r-(0.5*sigma^2)
 
 set.seed(1234)
+```
 
 ### 2. random number
+```
 rnd.num <- as.data.frame(matrix(rnorm(s*interval), nrow=s, ncol=interval))
-
-
+```
 
 ### 3. 누적 수익률 만들기
+```
 xx <- as.data.frame(matrix(data=0, nrow=s, ncol=interval+1))
 
 for ( i in 1:s){
   for ( j in 1:interval){
     
     xx[i,j+1] <- xx[i,j] + (mu*(T_t)+(sigma*sqrt(T_t)*rnd.num[i,j]))  
-    
   }
   
 }
+```
 
 ### 4. t시점에서 option의 가치
+```
 result <- matrix(NA, s, 1)
 
 for (i in 1:s){
@@ -53,11 +63,12 @@ mean(result[1:s,1])
 
 
 plot(x=seq(1,500,1), y=xx[999, 2:501], type="l", xlab = "interval", ylab = "Yield", main = "999th Stock Price")
-#plot(x <- sort(rnorm(47)), type = "s", main = "plot(x, type = \"s\")")
-#points(x, cex = .5, col = "dark red")
-
+plot(x <- sort(rnorm(47)), type = "s", main = "plot(x, type = \"s\")")
+points(x, cex = .5, col = "dark red")
+```
 
 ### 5. 블랙숄즈 공식과 비교, t시점에서 option의 가치
+```
 chooser_option <- function(s, k, r, T, t, sigma){
   d1 <- (log(s/k)+(r+0.5*sigma^2)*T)/(sigma*sqrt(T))
   d2 <- d1-sigma*sqrt(T)
@@ -68,10 +79,10 @@ chooser_option <- function(s, k, r, T, t, sigma){
 }
 
 chooser_option(100, 100, 0.03, 1, 0.3, 0.2)
-
-
+```
 
 ### 참고: call
+```
 calloption <- function(s, k, r, T, sigma){
   d1 <- (log(s/k)+(r+0.5*sigma^2)*T)/(sigma*sqrt(T))
   d2 <- d1-sigma*sqrt(T)
@@ -81,8 +92,10 @@ calloption <- function(s, k, r, T, sigma){
 }
 
 calloption(100, 100, 0.03, 1, 0.2)
+```
 
 ### 참고: put
+```
 putoption <- function(s, k, r, T, sigma){
   d1 <- (log(s/k)+(r+0.5*sigma^2)*T)/(sigma*sqrt(T))
   d2 <- d1-sigma*sqrt(T)
@@ -93,4 +106,5 @@ putoption <- function(s, k, r, T, sigma){
 
 putoption(100, 100, 0.03, 1, 0.2)
 
+```
 

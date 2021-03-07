@@ -1,0 +1,4 @@
+---
+title: "Blog_posts"
+listing: posts
+---

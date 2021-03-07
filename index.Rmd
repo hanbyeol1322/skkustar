@@ -2,14 +2,13 @@
 title: "HANBYEOL"
 image: "프사.jpg"
 links:
-  - label: facebook
-    url: "https://twitter.com/"
   - label: GitHub
-    url: "https://github.com/"
+    url: "https://github.com/hanbyeol1322/skkustar"
   - label: Email
     url: "mailto:hanbyeol1322@gmail.com"
 site: distill::distill_website
 output:
   postcards::jolla
 ---
-### Hi
+### SKKU 응용통계학
+
