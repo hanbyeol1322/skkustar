@@ -1,0 +1,45 @@
+---
+title: "응용통계학 hw2"
+description: |
+  AmesHousing
+author:
+  - name: hanbyeol
+date: 03-09-2021
+output:
+  distill::distill_article:
+    self_contained: False
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+library::function(AmesHousing)
+library(ggplot2)
+
+\#heating QC
+
+ames_raw %\>% group_by(`Heating QC`) %\>%
+summarise(across(SalePrice,mean,na.rm=TRUE))
+
+ggplot(ames_raw,aes(x=`Heating QC`,
+y=SalePrice))+geom_boxplot(outlier.shape = NA)
+
+ames_raw %\>% group_by(`Heating QC`) %\>%
+summarise(across(`Year Built`,max,na.rm=TRUE))
+
+p \<- ggplot(ames_raw) p
+
+p \<- ames_raw %\>% group_by(`Heating QC`) %\>%
+ggplot(aes(x=`Year Built`,y=SalePrice)) +
+geom_point(aes(color=as_factor(`Heating QC`),alpha=0.3)) p
+
+p \<- p + scale_color_brewer(palette = "Accent", labels = c("Fair",
+"Typical", "Excellent", "Good", "Poor"))+ scale_alpha_identity(0.3) p
+
+hqc \<- guide_legend(title = "Heating Quality and Condition", nrow = 5)
+p \<- p + guides(color = hqc) + theme(legend.position = "right") p p \<-
+p + facet_wrap('Heating') p
