@@ -102,14 +102,20 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="응용통계학 hw2"/>
 <meta property="og:url" content="https://hanbyeol1322.github.io/skkustar/posts/2021-03-10-hw2/"/>
+<meta property="og:image" content="https://hanbyeol1322.github.io/skkustar/posts/2021-03-10-hw2/hw2_files/figure-html5/unnamed-chunk-2-1.png"/>
+<meta property="og:image:width" content="1248"/>
+<meta property="og:image:height" content="768"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="STAR"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
-<meta property="twitter:card" content="summary"/>
+<meta property="twitter:card" content="summary_large_image"/>
 <meta property="twitter:title" content="STAR: AmesHousing"/>
 <meta property="twitter:description" content="응용통계학 hw2"/>
 <meta property="twitter:url" content="https://hanbyeol1322.github.io/skkustar/posts/2021-03-10-hw2/"/>
+<meta property="twitter:image" content="https://hanbyeol1322.github.io/skkustar/posts/2021-03-10-hw2/hw2_files/figure-html5/unnamed-chunk-2-1.png"/>
+<meta property="twitter:image:width" content="1248"/>
+<meta property="twitter:image:height" content="768"/>
 
 <!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
 <meta name="citation_title" content="STAR: AmesHousing"/>
@@ -126,7 +132,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["hw2_files/anchor-4.2.2/anchor.min.js","hw2_files/bowser-1.9.3/bowser.min.js","hw2_files/distill-2.2.21/template.v2.js","hw2_files/header-attrs-2.7.2/header-attrs.js","hw2_files/jquery-1.11.3/jquery.min.js","hw2_files/popper-2.6.0/popper.min.js","hw2_files/tippy-6.2.7/tippy-bundle.umd.min.js","hw2_files/tippy-6.2.7/tippy-light-border.css","hw2_files/tippy-6.2.7/tippy.css","hw2_files/tippy-6.2.7/tippy.umd.min.js","hw2_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["hw2_files/anchor-4.2.2/anchor.min.js","hw2_files/bowser-1.9.3/bowser.min.js","hw2_files/distill-2.2.21/template.v2.js","hw2_files/figure-html5/unnamed-chunk-2-1.png","hw2_files/figure-html5/unnamed-chunk-4-1.png","hw2_files/figure-html5/unnamed-chunk-5-1.png","hw2_files/figure-html5/unnamed-chunk-6-1.png","hw2_files/figure-html5/unnamed-chunk-7-1.png","hw2_files/figure-html5/unnamed-chunk-8-1.png","hw2_files/header-attrs-2.7.2/header-attrs.js","hw2_files/jquery-1.11.3/jquery.min.js","hw2_files/popper-2.6.0/popper.min.js","hw2_files/tippy-6.2.7/tippy-bundle.umd.min.js","hw2_files/tippy-6.2.7/tippy-light-border.css","hw2_files/tippy-6.2.7/tippy.css","hw2_files/tippy-6.2.7/tippy.umd.min.js","hw2_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2108,8 +2114,115 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <div class="d-article">
-<p>ames_raw %&gt;% group_by(<code>Heating QC</code>) %&gt;% summarise(across(SalePrice,mean,na.rm=TRUE))</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/topepo/AmesHousing'>AmesHousing</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h1 id="heating-qc">1. Heating QC</h1>
+<p>난방시설이 잘 되어있을수록 집 값이 높지 않을까? 난방시설을 그룹화해서 평균 집 값을 보자!</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ames_raw</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>`Heating QC`</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'>across</span><span class='op'>(</span><span class='va'>SalePrice</span>,<span class='va'>mean</span>,na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 2
+  `Heating QC` SalePrice
+  &lt;chr&gt;            &lt;dbl&gt;
+1 Ex             216367.
+2 Fa             122950.
+3 Gd             156855.
+4 Po              69033.
+5 TA             138985.</code></pre>
+</div>
+<p>난방시설의 quality가 좋을수록 평균 집 가격이 높다는 것이 확인되었다. 그럼 boxplot을 이용해서 가격차이가 얼마나 나는지 시각적으로 확인해보자.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>ames_raw</span>,<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>`Heating QC`</span>, y<span class='op'>=</span><span class='va'>SalePrice</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span>outlier.shape <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="hw2_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+</div>
+<p>또한 집이 최신에 지어질 수록 난방시절이 좋을 것 같다고 생각하고 각 quality별로 최대 년도를 보았다.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ames_raw</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>`Heating QC`</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'>across</span><span class='op'>(</span><span class='va'>`Year Built`</span>,<span class='va'>max</span>,na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 2
+  `Heating QC` `Year Built`
+  &lt;chr&gt;               &lt;int&gt;
+1 Ex                   2010
+2 Fa                   1978
+3 Gd                   2009
+4 Po                   1952
+5 TA                   1992</code></pre>
+</div>
+<p>확인결과 최근에 지어질수록 난방시설이 좋아지고 집 가격이 올라갈 것이라고 생각하고 <strong>ggplot</strong> 을 이용하여 연도별 sale price에 대한 난방시설 그래프를 그려보자.</p>
+<p><strong>Step1. 그래프를 그릴 백지를 준비한다.</strong></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>ames_raw</span><span class='op'>)</span>
+<span class='va'>p</span>
+</code></pre>
+</div>
+<p><img src="hw2_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<p><strong>Step2. 그래프의 축을 정해주고 난방시설의 quality를 그룹화하여 각각 다른 색의 point로 표현한다.</strong></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>ames_raw</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>`Heating QC`</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>`Year Built`</span>,y<span class='op'>=</span><span class='va'>SalePrice</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>color<span class='op'>=</span><span class='fu'>as_factor</span><span class='op'>(</span><span class='va'>`Heating QC`</span><span class='op'>)</span>,alpha<span class='op'>=</span><span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>p</span>
+</code></pre>
+</div>
+<p><img src="hw2_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<p><strong>Step3. point의 구분이 쉽도록 색을 지정해주며, 범례의 이름을 수정해준다.</strong></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>p</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_brewer.html'>scale_color_brewer</a></span><span class='op'>(</span>palette <span class='op'>=</span> <span class='st'>"Set1"</span>,
+                     labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Fair"</span>, <span class='st'>"Typical"</span>, <span class='st'>"Excellent"</span>, <span class='st'>"Good"</span>, <span class='st'>"Poor"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_identity.html'>scale_alpha_identity</a></span><span class='op'>(</span><span class='fl'>0.3</span><span class='op'>)</span>
+<span class='va'>p</span>
+</code></pre>
+</div>
+<p><img src="hw2_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<p><strong>Step4. 범례의 제목을 바꾸고 위치를 조정한다.</strong></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hqc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/guide_legend.html'>guide_legend</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Heating Quality and Condition"</span>, nrow <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>p</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/guides.html'>guides</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='va'>hqc</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"right"</span><span class='op'>)</span>
+<span class='va'>p</span>
+</code></pre>
+</div>
+<p><img src="hw2_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<p><strong>Step5. 위 그래프들을 난방 종류에 따라 나누어본다.</strong></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>p</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='st'>'Heating'</span><span class='op'>)</span>
+<span class='va'>p</span>
+</code></pre>
+</div>
+<p><img src="hw2_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<p>난방 종류별로 나누어본 결과 난방시설이 Excellent(초록색점)인 것은 모두 GasA(Gas forced warm air furnace를 사용하고 있는 것을 알 수 있다. 그럼 AmesHousing dataset을 GasA인 것만 필터링하여 좀 더 살펴 보자.</p>
+<h1 id="gasa">2. GasA</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
