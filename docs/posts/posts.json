@@ -11,9 +11,9 @@
     ],
     "date": "2021-03-09",
     "categories": [],
-    "contents": "\nlibrary(tidyverse)\nlibrary(AmesHousing)\nlibrary(ggplot2)\n#heating QC\names_raw %>% group_by(Heating QC) %>% summarise(across(SalePrice,mean,na.rm=TRUE))\nggplot(ames_raw,aes(x=Heating QC, y=SalePrice))+geom_boxplot(outlier.shape = NA)\names_raw %>% group_by(Heating QC) %>% summarise(across(Year Built,max,na.rm=TRUE))\np <- ggplot(ames_raw) p\np <- ames_raw %>% group_by(Heating QC) %>% ggplot(aes(x=Year Built,y=SalePrice)) + geom_point(aes(color=as_factor(Heating QC),alpha=0.3)) p\np <- p + scale_color_brewer(palette = “Accent”, labels = c(“Fair”, “Typical”, “Excellent”, “Good”, “Poor”))+ scale_alpha_identity(0.3) p\nhqc <- guide_legend(title = “Heating Quality and Condition”, nrow = 5) p <- p + guides(color = hqc) + theme(legend.position = “right”) p p <- p + facet_wrap(‘Heating’) p\n\n\n\n",
+    "contents": "\nheating QC\names_raw %>% group_by(`Heating QC`) %>%\nsummarise(across(SalePrice,mean,na.rm=TRUE))\nggplot(ames_raw,aes(x=`Heating QC`,\ny=SalePrice))+geom_boxplot(outlier.shape = NA)\names_raw %>% group_by(Heating QC) %>% summarise(across(Year Built,max,na.rm=TRUE))\np <- ggplot(ames_raw) p\np <- ames_raw %>% group_by(Heating QC) %>% ggplot(aes(x=Year Built,y=SalePrice)) + geom_point(aes(color=as_factor(Heating QC),alpha=0.3)) p\np <- p + scale_color_brewer(palette = “Accent”, labels = c(“Fair”, “Typical”, “Excellent”, “Good”, “Poor”))+ scale_alpha_identity(0.3) p\nhqc <- guide_legend(title = “Heating Quality and Condition”, nrow = 5) p <- p + guides(color = hqc) + theme(legend.position = “right”) p p <- p + facet_wrap(‘Heating’) p\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-03-09T13:24:57+00:00",
+    "last_modified": "2021-03-09T13:54:10+00:00",
     "input_file": "hw2.utf8.md"
   },
   {
