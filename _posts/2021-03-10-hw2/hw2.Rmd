@@ -43,48 +43,35 @@ ames_raw %>%
 
 확인결과 최근에 지어질수록 난방시설이 좋아지고 집 가격이 올라갈 것이라고 생각하고 **ggplot** 을 이용하여 연도별 sale price에 대한 난방시설 그래프를 그려보자.
 
-**Step1. 그래프를 그릴 백지를 준비한다.**
-
-```{r}
-p <- ggplot(ames_raw)
-p
-```
-
-**Step2. 그래프의 축을 정해주고 난방시설의 quality를 그룹화하여 각각 다른 색의 point로 표현한다.**
-
-```{r}
-p <- ames_raw %>% 
-  group_by(`Heating QC`) %>%
-  ggplot(aes(x=`Year Built`,y=SalePrice)) + 
-  geom_point(aes(color=as_factor(`Heating QC`),alpha=0.3))
-p
-```
-
-**Step3. point의 구분이 쉽도록 색을 지정해주며, 범례의 이름을 수정해준다.**
-
-```{r}
-p <- p + 
-  scale_color_brewer(palette = "Set1",
-                     labels = c("Fair", "Typical", "Excellent", "Good", "Poor"))+ 
-  scale_alpha_identity(0.3)
-p
-```
-
-**Step4. 범례의 제목을 바꾸고 위치를 조정한다.**
 
 ```{r}
 hqc <- guide_legend(title = "Heating Quality and Condition", nrow = 5)
-p <- p + 
+ames_raw %>% 
+  group_by(`Heating QC`) %>%
+  ggplot(aes(x=`Year Built`,y=SalePrice)) + 
+  geom_point(aes(color=as_factor(`Heating QC`),alpha=0.3))+
+  scale_color_brewer(palette = "Set1",
+                     labels = c("Fair", "Typical", "Excellent", "Good", "Poor"))+ 
+  scale_alpha_identity(0.3) + 
   guides(color = hqc) +
   theme(legend.position = "right")
-p
+
 ```
 
-**Step5. 위 그래프들을 난방 종류에 따라 나누어본다.**
+**위 그래프들을 난방 종류에 따라 나누어본다.**
 
 ```{r}
-p <- p + facet_wrap('Heating')
-p
+hqc <- guide_legend(title = "Heating Quality and Condition", nrow = 5)
+ames_raw %>% 
+  group_by(`Heating QC`) %>%
+  ggplot(aes(x=`Year Built`,y=SalePrice)) + 
+  geom_point(aes(color=as_factor(`Heating QC`),alpha=0.3))+
+  scale_color_brewer(palette = "Set1",
+                     labels = c("Fair", "Typical", "Excellent", "Good", "Poor"))+ 
+  scale_alpha_identity(0.3) + 
+  guides(color = hqc) +
+  theme(legend.position = "right") + facet_wrap('Heating')
+
 ```
 
 난방 종류별로 나누어본 결과 난방시설이 Excellent(초록색점)인 것은 모두 GasA(Gas forced warm air furnace를 사용하고 있는 것을 알 수 있다. 그럼 AmesHousing dataset을 GasA인 것만 필터링하여 좀 더 살펴 보자.
