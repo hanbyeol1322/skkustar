@@ -1,7 +1,7 @@
 ---
-title: "보험금융투자론"
+title: "Chooser Option Payoff"
 description: |
-  chooser option payoff
+  보험금융투자론
 author:
   - name: hanbyeol
 date: 03-07-2021
