@@ -1,5 +1,5 @@
 ---
-title: "Chooser Option Payoff"
+title: "Chooser Option Payoff: r code"
 description: |
   보험금융투자론
 author:
@@ -35,10 +35,11 @@ set.seed(1234)
 ### 2. random number
 ```
 rnd.num <- as.data.frame(matrix(rnorm(s*interval), nrow=s, ncol=interval))
+
 ```
 
 ### 3. 누적 수익률 만들기
-```
+
 xx <- as.data.frame(matrix(data=0, nrow=s, ncol=interval+1))
 
 for ( i in 1:s){
@@ -48,7 +49,7 @@ for ( i in 1:s){
   }
   
 }
-```
+
 
 ### 4. t시점에서 option의 가치
 ```
