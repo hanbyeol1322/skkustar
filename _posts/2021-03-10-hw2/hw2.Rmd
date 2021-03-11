@@ -17,7 +17,7 @@ library(AmesHousing)
 library(ggplot2)
 ```
 
-# 1. Square Feet & Garage Area
+# 1. Square Feet & Garage Area & Sale Price
 
 집 평수가 넓을수록 주차공간이 넓지 않을까?
 
@@ -35,7 +35,7 @@ ames_raw %>%
 
 1층과 2층 square feet를 더해서 집 평수를 계산하였다. 집 평수와 주차공간은 양의 관계를 보이며 차고에 자동차 수가 많아짐을 볼 수 있다. 또한 집 평수가 넓어질수록 집의 가격(point size)가 커짐을 확인 할 수 있다.
 
-# 2. Heating QC
+# 2. Heating QC & Year Built & Sale Price
 
 난방시설이 잘 되어있을수록 집 값이 높지 않을까? 난방시설을 그룹화해서 평균 집 값을 보자!
 
@@ -76,7 +76,7 @@ ames_raw %>%
 
 ```
 
-**위 그래프들을 난방 종류에 따라 나누어본다.**
+위 그래프들을 난방 종류에 따라 나누어본다.
 
 ```{r}
 hqc <- guide_legend(title = "Heating Quality and Condition", nrow = 5)
@@ -92,24 +92,28 @@ ames_raw %>%
 
 ```
 
-난방 종류별로 나누어본 결과 난방시설이 Excellent(초록색점)인 것은 모두 GasA(Gas forced warm air furnace를 사용하고 있는 것을 알 수 있다. 그럼 AmesHousing dataset을 GasA인 것만 필터링하여 좀 더 살펴 보자.
+난방 종류별로 나누어본 결과 난방시설이 Excellent(초록색점)인 것은 모두 GasA(Gas forced warm air furnace를 사용하고 있는 것을 알 수 있다. 또한 최근으로 갈수록 GasA Type의 집을 많이 짓는다는 것을 확인 할 수있다(색이 짙어짐). 그럼 AmesHousing dataset을 GasA인 것만 필터링하여 살펴 보자.
 
-# 3. GasA & Roof Style
+# 3. GasA & Kitchen Quality & Central Air Conditioning
 
-GasA로 난방을 사용하는 집안의 다른 시설 보기. 같은 난방시설(GasA)을 사용하는 지붕의 형태가 Gable 또는 Hip인 것이 다른 것보다 많이 사용된다는 것을 확인 할 수 있음.
+GasA로 난방을 사용하는 집안의 다른 시설 보기.
 
 ```{r}
 ames_raw %>% 
-  filter(Heating=="GasA") %>%
-  ggplot(aes(x=`Roof Style`, y=SalePrice)) + 
-  geom_jitter()+
-  geom_boxplot(outlier.shape = NA)
+         filter(Heating=="GasA") %>% 
+         ggplot(aes(x=`Kitchen Qual`,y=SalePrice,color=`Kitchen Qual`)) + 
+  geom_boxplot()+
+  facet_wrap(~ `Central Air`)
+
+
 ```
+
+같은 난방시설(GasA)을 사용하는 주방시설의 Quality도 중앙 에어컨(? 중앙제어 난방이라고 이해했음..)이 아닌 개별로 에어컨을 사용할 수 있는 것이 같은 Kitchen Quality에서도 집 값이 높다는 것을 확인 할 수 있다.
 
 # 4. 결론
 
 -   집 평수가 넓어질수록 주차를 할 수 있는 공간이 넓어지며 차고의 자동차 갯수가 증가하고, 집 가격도 상승한다.
 
--   Heating Quality가 좋은(Excellent)집은 모두 GasA type이다.
+-   Heating Quality가 좋은(Excellent)집은 모두 GasA type이며 최근으로 갈수록 GasA Type의 집을 많이 짓고 있다.
 
--   
+-   같은 난방시설과 난방 유형을 가진 집에서도 중앙에어컨인 경우보다 개별적으로 조절할 수 있는 집의 가격이 더 높다.
