@@ -105,3 +105,11 @@ ames_raw %>%
   geom_jitter()+
   geom_boxplot(outlier.shape = NA)
 ```
+
+# 4. 결론
+
+-   집 평수가 넓어질수록 주차를 할 수 있는 공간이 넓어지며 차고의 자동차 갯수가 증가하고, 집 가격도 상승한다.
+
+-   Heating Quality가 좋은(Excellent)집은 모두 GasA type이다.
+
+-   
