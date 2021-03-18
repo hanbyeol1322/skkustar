@@ -1,0 +1,95 @@
+---
+title: "saleprice prediction"
+description: 응용통계학 hw3
+author:
+  - name: hanbyeol
+    url: {}
+date: 03-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: code
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. library
+
+```{r}
+library(tibble)
+library(tidyverse)
+library(reprex)
+library(tibble)
+library(purrr)
+library(tidyr)
+library(magrittr)
+library(xlsx)
+library(corrplot)
+```
+
+# 2. 데이터 불러오기
+
+```{r}
+train <- read_csv("/cloud/project/_posts/2021-03-18-saleprice-prediction/train.csv")
+test <- read_csv("/cloud/project/_posts/2021-03-18-saleprice-prediction/test.csv")
+
+train_tb <- as_tibble(train)
+```
+
+# 3. 상관계수가 높은 변수 선택
+
+```{r}
+train_num <- dplyr::select_if(train, is.numeric)
+numericVars <- which(sapply(train, is.numeric))
+train_numVar <- train[, numericVars]
+cor_numVar <- cor(train_numVar, use='pairwise.complete.obs')
+cor_sorted <- as.matrix(sort(cor_numVar[, 'SalePrice'], decreasing = TRUE))
+CorHigh <- names(which(apply(cor_sorted, 1, function(x) abs(x) > 0.5)))
+cor_numVar <- cor_numVar[CorHigh, CorHigh]
+
+corrplot.mixed(cor_numVar, 
+               tl.col = 'black',   
+               tl.pos = 'lt',      
+               number.cex = .7)    
+
+```
+
+hw2에서 확인한 변수와 SalePrice와 높은 상관관계를 가진 4개 변수 선택
+
+-   OverallQual
+-   GrLivArea
+-   GarageArea
+-   YearBuilt
+
+# 4. Linear Model사용
+
+```{r}
+lm.fit = lm(SalePrice ~OverallQual + GrLivArea + GarageArea + YearBuilt, data = train_tb)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+# 5. outlier 없애기
+
+```{r}
+
+lm.fit = lm(SalePrice ~-1 + OverallQual + GrLivArea + GarageArea + YearBuilt, data = train_tb[-c(524, 692, 899, 1183, 1299),])
+summary(lm.fit)
+plot(lm.fit)
+```
+
+# 6. test data에 적용해서 집 값을 예측한다.
+
+```{r}
+pred <- predict(lm.fit, test, interval = "confidence")
+head(pred)
+
+```
+
+# 7. 결과 값을 실제 값과 비교
+
+```{r}
+# write.csv(pred, "C:/Users/hanby/Documents/21as/new.csv")
+```
