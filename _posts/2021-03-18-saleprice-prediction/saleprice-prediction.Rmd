@@ -15,7 +15,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# 1. library
+# library
 
 ```{r}
 library(tibble)
@@ -29,7 +29,7 @@ library(xlsx)
 library(corrplot)
 ```
 
-# 2. 데이터 불러오기
+# 1. 데이터 불러오기
 
 ```{r}
 train <- read_csv("/cloud/project/_posts/2021-03-18-saleprice-prediction/train.csv")
@@ -38,7 +38,7 @@ test <- read_csv("/cloud/project/_posts/2021-03-18-saleprice-prediction/test.csv
 train_tb <- as_tibble(train)
 ```
 
-# 3. 상관계수가 높은 변수 선택
+# 2. 상관계수가 높은 변수 선택
 
 ```{r}
 train_num <- dplyr::select_if(train, is.numeric)
@@ -63,7 +63,7 @@ hw2에서 확인한 변수와 SalePrice와 높은 상관관계를 가진 4개 �
 -   GarageArea
 -   YearBuilt
 
-# 4. Linear Model사용
+# 3. Linear Model사용
 
 ```{r}
 lm.fit = lm(SalePrice ~OverallQual + GrLivArea + GarageArea + YearBuilt, data = train_tb)
@@ -71,7 +71,7 @@ summary(lm.fit)
 plot(lm.fit)
 ```
 
-# 5. outlier 없애기
+# 4. outlier 없애기
 
 ```{r}
 
@@ -80,7 +80,7 @@ summary(lm.fit)
 plot(lm.fit)
 ```
 
-# 6. test data에 적용해서 집 값을 예측한다.
+# 5. test data에 적용해서 집 값을 예측한다.
 
 ```{r}
 pred <- predict(lm.fit, test, interval = "confidence")
@@ -88,7 +88,7 @@ head(pred)
 
 ```
 
-# 7. 결과 값을 실제 값과 비교
+# 6. 결과 값을 실제 값과 비교
 
 ```{r}
 # write.csv(pred, "C:/Users/hanby/Documents/21as/new.csv")

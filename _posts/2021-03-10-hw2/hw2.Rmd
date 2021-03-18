@@ -9,7 +9,10 @@ date: 03-10-2021
 output:
   distill::distill_article:
     self_contained: false
+    code_folding: code
 ---
+
+# library
 
 ```{r setup, include=TRUE}
 library(tidyverse)

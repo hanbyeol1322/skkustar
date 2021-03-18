@@ -59,7 +59,7 @@ library(palmerpenguins)
 
 ### Q.Adelie이거나 Gentoo이면서 bill lenth가 30에서 100 사이인 것은?
 
-####    A.filter사용시
+#### A.filter사용시
 
 ```{r}
     penguins %>% 
