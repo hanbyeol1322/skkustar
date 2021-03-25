@@ -9,6 +9,14 @@ date: 03-25-2021
 output:
   distill::distill_article:
     self_contained: false
+    html_document:
+    number_sections: true
+    fig_caption: true
+    toc: true
+    fig_width: 5
+    fig_height: 4
+    theme: cosmo
+    highlight: tango
     code_folding: code
 editor_options: 
   markdown: 
