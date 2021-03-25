@@ -5,15 +5,15 @@
       "title": "About this site",
       "description": "Some additional details about the website.",
       "author": [],
-      "contents": "\ndkdididkdi\n\n\n\n",
-      "last_modified": "2021-03-07T14:26:52+00:00"
+      "contents": "\n뭘로 채워야할까나\n\n\n\n",
+      "last_modified": "2021-03-25T01:36:40+00:00"
     },
     {
       "path": "blog_posts.html",
       "title": "Portfolio",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-03-18T15:36:29+00:00"
+      "last_modified": "2021-03-25T01:35:07+00:00"
     },
     {
       "path": "index.html",
@@ -27,7 +27,7 @@
       "title": "Portfolio",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-03-18T15:43:27+00:00"
+      "last_modified": "2021-03-25T01:35:46+00:00"
     }
   ],
   "collections": ["posts/posts.json"]
