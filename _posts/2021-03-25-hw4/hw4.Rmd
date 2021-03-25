@@ -248,3 +248,13 @@ write.csv(submission, row.names = FALSE,
 ```
 
 얻은 결과는 submission 파일로 가서 saleprice column에 exp취해서 넣어라
+
+## 6.1 회귀분석 결과
+
+![](images/%ED%9B%84.PNG)
+
+![](images/%EC%A0%84.PNG)
+
+이전 hw에서는 변수를 선택 할 때 단순히 상관관계가 높은 상위 4개만 선택하였다.
+
+전처리와 많은 변수들을 사용하니 sale price 예측력이 상승하였음을 확인 할 수 있다.
