@@ -8,18 +8,18 @@ author:
 date: 03-25-2021
 output:
   distill::distill_article:
-    self_contained: false
     html_document:
-    number_sections: true
     fig_caption: true
     toc: true
     fig_width: 5
     fig_height: 4
+    smooth_scroll: true
+    number_sections: true
     theme: cosmo
     highlight: tango
     code_folding: code
-editor_options: 
-  markdown: 
+    editor_options: 
+    markdown: 
     wrap: 72
 ---
 
@@ -32,8 +32,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 ## 1.1 Libraries
 
-We mainly exploits the functions from the tidyvers and tidymodels
-packages. `magrittr` has my favorite operators!
+We mainly exploits the functions from the tidyvers and tidymodels packages. `magrittr` has my favorite operators!
 
 ```{r load_lib, message=FALSE, warning=FALSE, results='hide'}
 library(tidymodels)
@@ -65,9 +64,7 @@ test <- read_csv(file.path(file_path, "test.csv"))
 
 ## 2.1 Basic info.
 
-Here is the basic information about `train` and `test`. We have
-approximately the same sample size for the train and test set. The
-number of columns in the train is 81 and the one in the test is 80.
+Here is the basic information about `train` and `test`. We have approximately the same sample size for the train and test set. The number of columns in the train is 81 and the one in the test is 80.
 
 ```{r}
 dim(train)
@@ -96,8 +93,7 @@ skim(test)
 
 ## 3.1 Distribution of `sale_price`
 
-If we check out the distribution of the house price, it is little bit
-skewed to the right.
+If we check out the distribution of the house price, it is little bit skewed to the right.
 
 ```{r message=FALSE, class.source = 'fold-hide'}
 train %>% 
@@ -105,11 +101,9 @@ train %>%
   geom_histogram()
 ```
 
-Since we want to build a linear regression assume that the noise follows
-the normal distribution, let us take a log to `SalePrice` variable.
+Since we want to build a linear regression assume that the noise follows the normal distribution, let us take a log to `SalePrice` variable.
 
-한쪽으로 치우쳐져 있는 값에 log를 취한다.(y가 정규분포를 따른다는
-가정하에서 회귀분석이 잘 된ㄷㅣ.)
+한쪽으로 치우쳐져 있는 값에 log를 취한다.(y가 정규분포를 따른다는 가정하에서 회귀분석이 잘 된ㄷㅣ.)
 
 ```{r message=FALSE, class.source = 'fold-hide'}
 train %>% 
@@ -119,10 +113,7 @@ train %>%
 
 ## 3.2 `NA`s
 
-There is a nice package for checking out `NA`s. Let's see how many
-variables we have which contains `NA`s. *in.na*인 값들을 다 더하면-\> 그
-col안에 missing observation이 있는 값들을 선택해서 *gg_miss_var*
-함수로표현
+There is a nice package for checking out `NA`s. Let's see how many variables we have which contains `NA`s. *in.na*인 값들을 다 더하면-\> 그 col안에 missing observation이 있는 값들을 선택해서 *gg_miss_var* 함수로표현
 
 ```{r message=FALSE, warning=FALSE, class.source = 'fold-hide'}
 library(naniar)
@@ -132,11 +123,7 @@ train %>%
   gg_miss_var()
 ```
 
-We can do more analysis about `NA`s with `upset()` function, which shows
-that most of the observations with `NA`s in the data set have `NA`s at
-the `PoolQC`, `MiscFeature`, `Alley`, `Fence` at the same time.
-동시에없는 정보들을 볼 수 있다. (NA의 연관성으로 전처리를 할 때 고려할
-수있다.)
+We can do more analysis about `NA`s with `upset()` function, which shows that most of the observations with `NA`s in the data set have `NA`s at the `PoolQC`, `MiscFeature`, `Alley`, `Fence` at the same time. 동시에없는 정보들을 볼 수 있다. (NA의 연관성으로 전처리를 할 때 고려할 수있다.)
 
 ```{r message=FALSE, class.source = 'fold-hide'}
 train %>% 
@@ -144,13 +131,11 @@ train %>%
   gg_miss_upset()
 ```
 
-From the above, we can have some insights that if a house doesn't have
-Pool, it is likely that it doesn't have Alley, Fence, and Fireplace too.
+From the above, we can have some insights that if a house doesn't have Pool, it is likely that it doesn't have Alley, Fence, and Fireplace too.
 
 # 4. Preprecessing with `recipe` (전처리 레시피 만들기)
 
-First, I would like to clean the variable names with `janitor` package
-so that we have consistent varible names.
+First, I would like to clean the variable names with `janitor` package so that we have consistent varible names.
 
 ## 4.1 `all_data` combine and name cleaning with `janitor`
 
@@ -165,11 +150,7 @@ all_data %>% dim()
 
 ## 4.2 Make recipe
 
-Note that we will use mode imputation for nominal variables for the
-baseline, and the mean imputation for the numerical variables. However,
-this should be changed to build a more sensitive model because we have
-checked that the `NA` in the nominal variables indicates that cases
-where the house doesn't have the corresponding attributes.
+Note that we will use mode imputation for nominal variables for the baseline, and the mean imputation for the numerical variables. However, this should be changed to build a more sensitive model because we have checked that the `NA` in the nominal variables indicates that cases where the house doesn't have the corresponding attributes.
 
 ```{r}
 housing_recipe <- all_data %>% 
@@ -187,8 +168,7 @@ print(housing_recipe)
 
 all_data로 모델링을 할거다
 
-*recipe()*: target variable은 saleprice이고,나머지 변수들은 예측변수로
-쓸거다
+*recipe()*: target variable은 saleprice이고,나머지 변수들은 예측변수로 쓸거다
 
 *step_rm()*: id는 제거를 해라(별 필요 없을 거 같아서)
 
@@ -204,14 +184,12 @@ all_data로 모델링을 할거다
 
 *prep()*: 위의 전처리 과정을 거친 all_data를 training data로 준비시켜라
 
-
 -   정규화를 시키는 이유: 값이 이동할 때 unit을 고려: 1달러=1000원으로 같은 효과를 주기 위해서
 -   tree계열로 할 때는 정규화 필요가 없는데, 어떤 기준값보다 큰지 작은지만 판단하기 때문이다!(추후 수업)
 
 ## 4.3 `juice` the all_data2 and split
 
-전처리한 data를 다시 빼내서 all_data2로 가져와라잇 더미코딩을 해줬기
-때문에 col의 수가 늘어난다.
+전처리한 data를 다시 빼내서 all_data2로 가져와라잇 더미코딩을 해줬기 때문에 col의 수가 늘어난다.
 
 ```{r}
 all_data2 <- juice(housing_recipe)
