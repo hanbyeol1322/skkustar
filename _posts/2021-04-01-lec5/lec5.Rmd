@@ -1,0 +1,170 @@
+---
+title: "회귀선의 계수를 구하는 방법"
+description: 
+  lec5
+author:
+  - name: hanbyeol
+    url: {}
+date: 04-01-2021
+output:
+  distill::distill_article:
+    html_document:
+    fig_caption: true
+    toc: true
+    fig_width: 5
+    fig_height: 4
+    smooth_scroll: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: code
+    editor_options: 
+      markdown: 
+    markdown: 
+    wrap: 72
+---
+
+이번 시간에는 회귀선의 계수를 구하는 방법을 이론적으로 풀어보고, 실제로 행렬을 이용해서 구해봤다.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# 1. beta
+
+알고있는 점과 회귀선의 직선거리가 최소가 되게 하는 계수를 beta라고 했을 때 행렬을 이용해서 풀면 다음과 같다.
+
+$$beta = (X^TX)^{-1}X^Ty $$
+
+# 2. mtcars data를 이용해서 직접 구해보기
+
+```{r}
+head(mtcars)
+```
+
+## 2.1 X와 y 값 설정
+
+y 값으로는 mpg, **X** 벡터들로는 cyl,disp, hp를 가져온다.
+
+```{r}
+y <- as.vector(mtcars[,1]) 
+X <- as.matrix(mtcars[,2:4])
+```
+
+## 2.2 intercept 열 추가
+
+intercept를 추가해주기 위해 cbind()를 이용해서 열을 더해준다.
+
+```{r}
+X <- cbind(1,X)
+```
+
+-   Transpose: *t(X)*
+
+-   행렬의 곱:  %*%
+
+-   역행렬: *solve()*
+
+따라서 우리가 구하고자 하는 식을 행렬로 표현하면 
+
+```{r}
+beta <- solve(t(X) %*% X) %*% t(X) %*% y
+```
+
+## 2.3 행렬로 구한 값과 실제 선형회귀 결과 값을 비교
+
+행렬을 이용해서 구한 beta가 실제 regression을 했을 때 나오는 beta랑 같은지 확인
+
+```{r}
+result <- lm(mpg ~ cyl + disp + hp, data=mtcars) 
+result$coefficients
+library(tibble) 
+set.seed(2021)
+```
+
+
+-   x: 0에서 1사이에 0.05씩 떨어져 있는 수 중에서 10개를 무작위로 뽑아라
+
+```{r}
+x <- sample(seq(0,1,by=0.05), 10) 
+```
+
+
+-   y: 그 x를 sin 2pi에 넣고 epsilon(rnorm, sd=0.2인)을 더해라 
+
+```{r}
+y <- sin(2* pi * x) + rnorm(length(x), sd=0.2)
+```
+
+```{r}
+mydata <- tibble(x = x, y = y) 
+mydata
+```
+
+
+-   원래 값과 비교 
+
+```{r}
+x2 <- seq(0, 1, by = 0.01) 
+y2 <- sin(2 * pi * x2) 
+plot(x, y) 
+points(x2, y2, type="l", col = "red")
+```
+
+## 2.4 위 데이터를 다항식을 이용해서 표현하기
+
+-   0차 polynomial
+
+```{r}
+x2 <- seq(0, 1, by = 0.01) 
+y2 <- sin(2 * pi * x2) 
+plot(x,y) 
+points(x2, y2, type="l", col = "red") 
+abline(h = mean(y), col = "blue")
+```
+
+-   1차식으로 회귀직선 구하기
+
+```{r}
+x2 <- seq(0, 1, by = 0.01) 
+y2 <- sin(2 * pi * x2) 
+result <- lm(y~x, data = mydata) 
+plot(x, y) 
+points(x2, y2, type="l", col = "red") 
+abline(result, col="blue")
+```
+
+-   3차식으로 회귀직선 구하기
+
+```{r}
+x2 <- seq(0, 1, by = 0.01) 
+y2 <- sin(2* pi * x2)
+result <- lm(y ~ poly(x, 3), data = mydata)
+plot(x, y) 
+points(x2, y2, type ="l", col = "red") 
+y3 <- predict(result, newdata = tibble(x = x2)) 
+points(x2, y3, type="l", col="blue")
+```
+
+# 2.5 행렬을 이용해서 3차 회귀계수방정식, beta구하기
+
+```{r}
+X <- cbind(1, x, x^2, x^3) 
+beta <- solve(t(X) %*% X) %*% t(X) %*% y
+```
+
+-   구한 베타로 예측하는 곡선 그리기
+
+```{r}
+beta <- as.vector(beta) 
+x3 <- seq(0, 1, by=0.01)
+
+y_hat <- beta[1] + x3 * beta[2] + x3^2 * beta[3] + x3^3 * beta[4]
+plot(x,y) 
+points(x2, y2, type = "l", col = "red") 
+points(x3, y_hat, type = "l", col = "blue")
+```
+
+
+
+

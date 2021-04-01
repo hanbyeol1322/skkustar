@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2021-04-01-lec5/",
+    "title": "회귀선의 계수를 구하는 방법",
+    "description": "lec5",
+    "author": [
+      {
+        "name": "hanbyeol",
+        "url": {}
+      }
+    ],
+    "date": "2021-04-01",
+    "categories": [],
+    "contents": "\n\nContents\n1. beta\n2. mtcars data를 이용해서 직접 구해보기\n2.1 X와 y 값 설정\n2.2 intercept 열 추가\n2.3 행렬로 구한 값과 실제 선형회귀 결과 값을 비교\n2.4 위 데이터를 다항식을 이용해서 표현하기\n\n2.5 행렬을 이용해서 3차 회귀계수방정식, beta구하기\n\n이번 시간에는 회귀선의 계수를 구하는 방법을 이론적으로 풀어보고, 실제로 행렬을 이용해서 구해봤다.\n1. beta\n알고있는 점과 회귀선의 직선거리가 최소가 되게 하는 계수를 beta라고 했을 때 행렬을 이용해서 풀면 다음과 같다.\n\\[beta = (X^TX)^{-1}X^Ty \\]\n2. mtcars data를 이용해서 직접 구해보기\n\n\ncode\n\nhead(mtcars)\n\n\n                   mpg cyl disp  hp drat    wt  qsec vs am gear carb\nMazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4\nMazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4\nDatsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1\nHornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1\nHornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2\nValiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1\n\n2.1 X와 y 값 설정\ny 값으로는 mpg, X 벡터들로는 cyl,disp, hp를 가져온다.\n\n\ncode\n\ny <- as.vector(mtcars[,1]) \nX <- as.matrix(mtcars[,2:4])\n\n\n\n2.2 intercept 열 추가\nintercept를 추가해주기 위해 cbind()를 이용해서 열을 더해준다.\n\n\ncode\n\nX <- cbind(1,X)\n\n\n\nTranspose: t(X)\n행렬의 곱: %*%\n역행렬: solve()\n따라서 우리가 구하고자 하는 식을 행렬로 표현하면\n\n\ncode\n\nbeta <- solve(t(X) %*% X) %*% t(X) %*% y\n\n\n\n2.3 행렬로 구한 값과 실제 선형회귀 결과 값을 비교\n행렬을 이용해서 구한 beta가 실제 regression을 했을 때 나오는 beta랑 같은지 확인\n\n\ncode\n\nresult <- lm(mpg ~ cyl + disp + hp, data=mtcars) \nresult$coefficients\n\n\n(Intercept)         cyl        disp          hp \n34.18491917 -1.22741994 -0.01883809 -0.01467933 \n\ncode\n\nlibrary(tibble) \nset.seed(2021)\n\n\n\nx: 0에서 1사이에 0.05씩 떨어져 있는 수 중에서 10개를 무작위로 뽑아라\n\n\ncode\n\nx <- sample(seq(0,1,by=0.05), 10) \n\n\n\ny: 그 x를 sin 2pi에 넣고 epsilon(rnorm, sd=0.2인)을 더해라\n\n\ncode\n\ny <- sin(2* pi * x) + rnorm(length(x), sd=0.2)\n\n\n\n\n\ncode\n\nmydata <- tibble(x = x, y = y) \nmydata\n\n\n# A tibble: 10 x 2\n       x      y\n   <dbl>  <dbl>\n 1  0.3   1.00 \n 2  0.25  1.18 \n 3  0.65 -0.806\n 4  1     0.346\n 5  0.55 -0.525\n 6  0.15  0.754\n 7  0.95 -0.273\n 8  0.7  -0.649\n 9  0.5   0.321\n10  0.9  -0.956\n\n원래 값과 비교\n\n\ncode\n\nx2 <- seq(0, 1, by = 0.01) \ny2 <- sin(2 * pi * x2) \nplot(x, y) \npoints(x2, y2, type=\"l\", col = \"red\")\n\n\n\n\n2.4 위 데이터를 다항식을 이용해서 표현하기\n0차 polynomial\n\n\ncode\n\nx2 <- seq(0, 1, by = 0.01) \ny2 <- sin(2 * pi * x2) \nplot(x,y) \npoints(x2, y2, type=\"l\", col = \"red\") \nabline(h = mean(y), col = \"blue\")\n\n\n\n\n1차식으로 회귀직선 구하기\n\n\ncode\n\nx2 <- seq(0, 1, by = 0.01) \ny2 <- sin(2 * pi * x2) \nresult <- lm(y~x, data = mydata) \nplot(x, y) \npoints(x2, y2, type=\"l\", col = \"red\") \nabline(result, col=\"blue\")\n\n\n\n\n3차식으로 회귀직선 구하기\n\n\ncode\n\nx2 <- seq(0, 1, by = 0.01) \ny2 <- sin(2* pi * x2)\nresult <- lm(y ~ poly(x, 3), data = mydata)\nplot(x, y) \npoints(x2, y2, type =\"l\", col = \"red\") \ny3 <- predict(result, newdata = tibble(x = x2)) \npoints(x2, y3, type=\"l\", col=\"blue\")\n\n\n\n\n2.5 행렬을 이용해서 3차 회귀계수방정식, beta구하기\n\n\ncode\n\nX <- cbind(1, x, x^2, x^3) \nbeta <- solve(t(X) %*% X) %*% t(X) %*% y\n\n\n\n구한 베타로 예측하는 곡선 그리기\n\n\ncode\n\nbeta <- as.vector(beta) \nx3 <- seq(0, 1, by=0.01)\n\ny_hat <- beta[1] + x3 * beta[2] + x3^2 * beta[3] + x3^3 * beta[4]\nplot(x,y) \npoints(x2, y2, type = \"l\", col = \"red\") \npoints(x3, y_hat, type = \"l\", col = \"blue\")\n\n\n\n\n\n\n\n",
+    "preview": "posts/2021-04-01-lec5/distill-preview.png",
+    "last_modified": "2021-04-01T13:56:08+00:00",
+    "input_file": "lec5.utf8.md",
+    "preview_width": 960,
+    "preview_height": 768
+  },
+  {
     "path": "posts/2021-03-25-hw4/",
     "title": "saleprice prediction 수정(tidymodels)",
     "description": "응용통계학 hw4",
