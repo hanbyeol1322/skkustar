@@ -1,0 +1,63 @@
+---
+title: "fork update"
+description: |
+  A short description of the post.
+author:
+  - name: hanbyeol
+    url: {}
+date: 04-10-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+내가 fork한 곳에 교수님께서 update를 하셨는데,, 
+그걸 내가 local로 작업하고 있는 곳ㅇ ㅔ 반영이 안되어서 방법을 찾다가 까먹기 전에 기록해두기...
+
+
+일단!
+아직 이 방식이 어떤 구조로 되는지는 완벽하게 파악하지 못함 ㅠㅠ
+
+**terminal**에 입력하시오!
+
+
+$ git remote -v
+origin  https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch)
+origin  https://github.com/hanbyeol1322/predictivemodeling-with-r (push)
+
+
+
+
+$ git remote add update https://github.com/issactoast/predictivemodeling-with-r
+
+
+
+
+$ git remote -v
+origin    https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch)
+origin    https://github.com/hanbyeol1322/predictivemodeling-with-r (push)
+update  https://github.com/issactoast/predictivemodeling-with-r (fetch)
+update  https://github.com/issactoast/predictivemodeling-with-r (push)
+
+
+
+
+$ git fetch update
+
+
+
+
+$ git checkout main
+
+
+
+
+$ git merge update/main
+
+
