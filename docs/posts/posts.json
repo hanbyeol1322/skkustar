@@ -2,7 +2,7 @@
   {
     "path": "posts/2021-04-10-fork-update/",
     "title": "fork update",
-    "description": "A short description of the post.",
+    "description": "local에 fork한 거 update하는 방법",
     "author": [
       {
         "name": "hanbyeol",
@@ -13,7 +13,7 @@
     "categories": [],
     "contents": "\n내가 fork한 곳에 교수님께서 update를 하셨는데,, 그걸 내가 local로 작업하고 있는 곳ㅇ ㅔ 반영이 안되어서 방법을 찾다가 까먹기 전에 기록해두기…\n일단! 아직 이 방식이 어떤 구조로 되는지는 완벽하게 파악하지 못함 ㅠㅠ\nterminal에 입력하시오!\n$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)\n$ git remote add update https://github.com/issactoast/predictivemodeling-with-r\n$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push) update https://github.com/issactoast/predictivemodeling-with-r (fetch) update https://github.com/issactoast/predictivemodeling-with-r (push)\n$ git fetch update\n$ git checkout main\n$ git merge update/main\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-04-10T23:33:09+00:00",
+    "last_modified": "2021-04-10T23:36:33+00:00",
     "input_file": {}
   },
   {
