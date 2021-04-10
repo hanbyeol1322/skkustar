@@ -11,9 +11,9 @@
     ],
     "date": "2021-04-10",
     "categories": [],
-    "contents": "\n내가 fork한 곳에 교수님께서 update를 하셨는데,, 그걸 내가 local로 작업하고 있는 곳ㅇ ㅔ 반영이 안되어서 방법을 찾다가 까먹기 전에 기록해두기…\n일단! 아직 이 방식이 어떤 구조로 되는지는 완벽하게 파악하지 못함 ㅠㅠ\nterminal에 입력하시오!\n$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)\n$ git remote add update https://github.com/issactoast/predictivemodeling-with-r\n$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push) update https://github.com/issactoast/predictivemodeling-with-r (fetch) update https://github.com/issactoast/predictivemodeling-with-r (push)\n$ git fetch update\n$ git checkout main\n$ git merge update/main\n\n\n\n",
+    "contents": "\n내가 fork한 곳에 교수님께서 update를 하셨는데,, 그걸 내가 local로 작업하고 있는 곳ㅇ ㅔ 반영이 안되어서 방법을 찾다가 까먹기 전에 기록해두기…\n일단! 아직 이 방식이 어떤 구조로 되는지는 완벽하게 파악하지 못함 ㅠㅠ\nterminal에 입력하시오!\n$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)\n$ git remote add update https://github.com/issactoast/predictivemodeling-with-r\n$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push) update https://github.com/issactoast/predictivemodeling-with-r (fetch) update https://github.com/issactoast/predictivemodeling-with-r (push)\n$ git fetch update\n$ git checkout main\n$ git merge update/main\n근데 문제가 있다.. 이렇게 하면 다른사람들 것까지 merge되어 있는거라서 별이 local에 다 따라오는데,,\n이 부분은 좀 더 찾아봐야겠다.\n(교수님이 update한 거랑 내가 merge한 부분만 가져오는 방법)\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-04-10T23:36:33+00:00",
+    "last_modified": "2021-04-10T23:41:39+00:00",
     "input_file": {}
   },
   {

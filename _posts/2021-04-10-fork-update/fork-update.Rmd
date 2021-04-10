@@ -61,3 +61,9 @@ $ git checkout main
 $ git merge update/main
 
 
+근데 문제가 있다.. 이렇게 하면 다른사람들 것까지 merge되어 있는거라서 별이 local에 다 따라오는데,,
+
+이 부분은 좀 더 찾아봐야겠다.
+
+(교수님이 update한 거랑 내가 merge한 부분만 가져오는 방법)
+
