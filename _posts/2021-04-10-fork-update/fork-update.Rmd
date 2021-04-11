@@ -29,17 +29,43 @@ knitr::opts_chunk$set(echo = FALSE)
 
 **terminal**에 입력하시오!
 
-`$ git remote -v origin  https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin  https://github.com/hanbyeol1322/predictivemodeling-with-r (push)`
+**`$ git remote -v`**
 
-`$ git remote add update https://github.com/issactoast/predictivemodeling-with-r`
+`> origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch)`
 
-`$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)update https://github.com/issactoast/predictivemodeling-with-r (fetch) update https://github.com/issactoast/predictivemodeling-with-r (push)`
+`> origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)`
 
-`$ git fetch update`
 
-`$ git checkout main`
 
-`$ git merge update/main`
+**`$ git remote add update`**
+
+`> https://github.com/issactoast/predictivemodeling-with-r`
+
+
+
+**`$ git remote -v`**
+
+`> origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch)`
+
+`> origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)`
+
+`> update https://github.com/issactoast/predictivemodeling-with-r (fetch)`
+
+`> update https://github.com/issactoast/predictivemodeling-with-r (push)`
+
+
+
+**`$ git fetch update`**
+
+
+
+**`$ git checkout main`**
+
+
+
+**`$ git merge update/main`**
+
+
 
 이렇게 하면 교수님께서 업데이트한 내용이 내 local에 반영됨 \~! \~!
 

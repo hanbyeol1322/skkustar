@@ -2113,12 +2113,19 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>일단!</p>
 <p>아직 이 방식이 어떤 구조로 되는지는 완벽하게 파악하지 못함 ㅠㅠ</p>
 <p><strong>terminal</strong>에 입력하시오!</p>
-<p><code>$ git remote -v origin  https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin  https://github.com/hanbyeol1322/predictivemodeling-with-r (push)</code></p>
-<p><code>$ git remote add update https://github.com/issactoast/predictivemodeling-with-r</code></p>
-<p><code>$ git remote -v origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch) origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)update https://github.com/issactoast/predictivemodeling-with-r (fetch) update https://github.com/issactoast/predictivemodeling-with-r (push)</code></p>
-<p><code>$ git fetch update</code></p>
-<p><code>$ git checkout main</code></p>
-<p><code>$ git merge update/main</code></p>
+<p><strong><code>$ git remote -v</code></strong></p>
+<p><code>&gt; origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch)</code></p>
+<p><code>&gt; origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)</code></p>
+<p><strong><code>$ git remote add update</code></strong></p>
+<p><code>&gt; https://github.com/issactoast/predictivemodeling-with-r</code></p>
+<p><strong><code>$ git remote -v</code></strong></p>
+<p><code>&gt; origin https://github.com/hanbyeol1322/predictivemodeling-with-r (fetch)</code></p>
+<p><code>&gt; origin https://github.com/hanbyeol1322/predictivemodeling-with-r (push)</code></p>
+<p><code>&gt; update https://github.com/issactoast/predictivemodeling-with-r (fetch)</code></p>
+<p><code>&gt; update https://github.com/issactoast/predictivemodeling-with-r (push)</code></p>
+<p><strong><code>$ git fetch update</code></strong></p>
+<p><strong><code>$ git checkout main</code></strong></p>
+<p><strong><code>$ git merge update/main</code></strong></p>
 <p>이렇게 하면 교수님께서 업데이트한 내용이 내 local에 반영됨 ~! ~!</p>
 <p>근데 문제가 있다..</p>
 <p>이렇게 하면 다른사람들 merge된 것까지 내 local에 다 따라오는데,,이 부분은 좀 더 찾아봐야겠다.</p>
