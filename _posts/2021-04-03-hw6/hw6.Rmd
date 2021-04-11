@@ -1,5 +1,5 @@
 ---
-title: "전처리후 oulier 제거와 training"
+title: "전처리후 outlier 제거와 training"
 description: |
   hw6
 author:
