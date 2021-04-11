@@ -44,7 +44,7 @@ files
 ```
 
 ```{r, message=FALSE}
-train <- read_csv(file.path(file_path, "train.csv"))%>% 
+test <- read_csv(file.path(file_path, "test.csv"))%>% 
   janitor::clean_names()
 train <- read_csv(file.path(file_path, "train.csv"))%>% 
   janitor::clean_names() 
@@ -163,8 +163,9 @@ train %>%
 먼저 outlier를 제거한 train과 test를 다시 전처리해준다. 
 
 ```{r}
-all_data <- bind_rows(train, test)
-names(all_data)[1:10]
+ all_data <- bind_rows(train, test)
+ names(all_data)[1:10]
+
 ```
 
 -   Make recipe
@@ -387,15 +388,17 @@ param_grid <- grid_regular(penalty(),
 
 각 fold에 대해서 가능한 후보군 집합이 있다. 
 rmse말고 다른 (mae)것도 함 께 볼 수 있다 .
+
+*에러남*
 ```{r}
-library(tictoc)
-doParallel::registerDoParallel()
-tic()
-tune_result <- workflow %>% 
-  tune_grid(validation_split,
-            grid = param_grid,
-            metrics = metric_set(rmse,mae))
-toc()
+# library(tictoc)
+# doParallel::registerDoParallel()
+# tic()
+# tune_result <- workflow %>% 
+#   tune_grid(validation_split,
+#             grid = param_grid,
+#             metrics = metric_set(rmse,mae))
+# toc()
 ```
 
 
@@ -407,16 +410,17 @@ tune_best$mixture
 
 결과에 mixture=0이 나오면 regression방법으로 lasso 보다 ridge를 사용하는 것이 예측력에 더 좋다는 것을 확인 할 수 있음
 
-
+*에러*
 ```{r message=FALSE}
-tune_result %>%
-  collect_metrics() %>%
-  filter(mixture == tune_best$mixture) %>%
-  ggplot(aes(penalty, mean, color = .metric)) +
-  geom_line(size = 1.5) +
-  scale_x_log10() +
-  theme(legend.position = "none") +
-  labs(title = "RMSE")
+# tune_result %>%
+#   collect_metrics() %>%
+#   filter(mixture == tune_best$mixture) %>%
+#   ggplot(aes(penalty, mean, color = .metric)) +
+#   geom_line(size = 1.5) +
+#   scale_x_log10() +
+#   theme(legend.position = "none") +
+#   labs(title = "RMSE")
+
 ```
 
 show_best(): mean값을 최소로 만들어주는 값들의 몇개를 보여준다 
@@ -429,14 +433,15 @@ tune_result %>% show_best()
 Set `mixture` is equal to zero refering the Ridge regression in `glmnet` since the 
 위에서 구한 값으로 train2를 학습시킨다. 
 
+*에러*
 ```{r message=FALSE, warning=FALSE}
 elastic_model <- 
     linear_reg(penalty = tune_best$penalty, # 0.095
                mixture = tune_best$mixture) %>%
     set_engine("glmnet")
-elastic_fit <- 
-    elastic_model %>% 
-    fit(sale_price ~ ., data = train2)
+# elastic_fit <- 
+#   elastic_model %>% 
+#   fit(sale_price ~ ., data = train2)
 options(max.print = 10)
 elastic_fit %>% 
     tidy() %>% 
