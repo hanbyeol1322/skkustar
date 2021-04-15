@@ -1,0 +1,92 @@
+---
+title: "Homework 1  Predictive modeling"
+author: "Due on 2021-04-16"
+date: "2021-03-06"
+documentclass: oblivoir
+
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dev = "cairo_pdf")
+knitr::opts_chunk$set(fig.showtext=TRUE)
+```
+
+# Notice {.unnumbered}
+
+-   All homework should be turned in pdf format.
+-   Homework can be written in Korean.
+
+# Ridge regression solution
+
+Let $X\in\mathbb{R}^{n\times d}$ $\left(n\geq d\right)$ denote a matrix
+with the singular value decomposition given by $X=U\Sigma V^{T}$, where
+$U\in\mathbb{R}^{n\times d}$ and $V\in\mathbb{R}^{d\times d}$ are
+orthonormal matrices satisfying $U^{T}U=I_{d}$ and $V^{T}V=I_{d}$, and
+$\Sigma=diag\left(\sigma_{1},\cdots,\sigma_{d}\right)$ is a diagonal
+matrix with $\sigma_{i}\geq0,i=1,...,d.$
+
+1)  Simplify the following expression into products of three matrices,
+    i.e, $U$, $V$ and another diagonal matrix depending on $\sigma_{i}$
+    and $\lambda$. $$
+    \left(\lambda I_{d}+X^{T}X\right)^{-1}X^{T},
+    $$ where $I_{d}$ is an identity matrix of size $d\times d$.
+
+
+2)  We have learned that the optimal solution of ridge regression can be
+    written as $$
+    \hat{\boldsymbol{\beta}}=\left(\lambda I+X^{T}X\right)^{-1}X^{T}y.
+    $$ Show that the Euclidean norm of the optimal solution
+    $\left|\left|\hat{\boldsymbol{\beta}}\right|\right|_{2}$ will
+    decrease as $\lambda$ increases.
+    
+    
+```{r figure1, echo=FALSE, out.width = '50%', fig.ncol=2, fig.align='center'}
+
+knitr::include_graphics("as1.png")
+
+knitr::include_graphics("as2.png")
+```
+
+# Kaggle competition data
+
+In this problem, we will examine the behaviors of Ridge regression and
+Lasso regression coefficients with respect to the penalty values in
+`tidymodels`.
+
+1)  Using the `tune_grid()` function in tidymodels, **calculates the all
+    the coefficients of ridge and lasso regression which corresponding
+    penalty parameter for the train data set** in [the advanced
+    regression competition in
+    Kaggle](https://www.kaggle.com/c/house-prices-advanced-regression-techniques),
+
+The preset penalty values are stored in the folloing code.
+
+```{r eval=FALSE}
+library(tidymodels)
+grid_regular(penalty(), levels = 100)
+```
+
+2)  Plot the coefficients vs. the specified penalty values above for
+    ridge regression and lasso regression. You are expecting to see the
+    following types of plots with respect to the penalty as follows.
+
+```{r figure2, echo=FALSE, fig.subcap=c('Ridge', 'Lasso'),out.width = '50%', fig.ncol=2, fig.align='center'}
+
+knitr::include_graphics("ridge.png")
+
+knitr::include_graphics("lasso.png")
+```
+
+```{r figure3, echo=FALSE, fig.subcap=c('Ridge', 'Lasso'),out.width = '50%', fig.ncol=2, fig.align='center'}
+
+knitr::include_graphics("rg2.png")
+
+knitr::include_graphics("ls2.png")
+```
+
+2번 문제는 구글링하면서 찾은건데.. 결과 그래프를 해석할 수 없었다.. 
+동기들 발표하는거 보고 다시 따라서 해봐야겠다..
