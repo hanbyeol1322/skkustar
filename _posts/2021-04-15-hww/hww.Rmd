@@ -2,11 +2,23 @@
 title: "Homework 1  Predictive modeling"
 author: "Due on 2021-04-16"
 date: "2021-03-06"
-documentclass: oblivoir
-
-editor_options: 
-  markdown: 
+output:
+  distill::distill_article:
+    html_document:
+    fig_caption: true
+    toc: true
+    fig_width: 5
+    fig_height: 4
+    smooth_scroll: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: code
+    editor_options: 
+      markdown: 
+    markdown: 
     wrap: 72
+
 ---
 
 ```{r setup, include=FALSE}
