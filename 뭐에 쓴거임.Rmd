@@ -1,0 +1,344 @@
+---
+title: "Untitled"
+author: "star"
+date: '2021 4 16 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_lib, message=FALSE, warning=FALSE, results='hide'}
+library(tidymodels)
+library(tidyverse)
+library(magrittr)
+library(skimr)
+library(knitr)
+theme_set(theme_bw())
+```
+
+
+
+```{r}
+file_path <- "/cloud/project"
+files <- list.files(file_path)
+files
+```
+
+```{r, message=FALSE}
+test <- read_csv(file.path(file_path, "test.csv"))%>% 
+  janitor::clean_names()
+train <- read_csv(file.path(file_path, "train.csv"))%>% 
+  janitor::clean_names() 
+```
+
+
+```{r class.source = 'fold-hide'}
+train %>% 
+  ggplot(aes(x = gr_liv_area, 
+             y = log(sale_price))) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Before removing outliers")
+```
+
+
+```{r}
+# outliers 
+train %>%
+  filter(gr_liv_area > 4500) %>%
+  DT::datatable(width = "100%",  
+                options = list(scrollX = TRUE))
+# outliers remove
+train %<>% filter(!(gr_liv_area > 4500))
+```
+
+```{r class.source = 'fold-hide'}
+train %>% 
+  ggplot(aes(x = gr_liv_area, 
+             y = log(sale_price))) +
+  geom_point(alpha = 0.6) +
+  labs(title = "After removing outliers")
+```
+
+
+```{r class.source = 'fold-hide'}
+train %>% 
+  ggplot(aes(x = total_bsmt_sf, 
+             y = log(sale_price))) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Before removing outliers")
+```
+
+
+```{r}
+# outliers 
+train %>%
+  filter(total_bsmt_sf > 3000 &
+                   log(sale_price) < 13) %>%
+  DT::datatable(width = "100%",  
+                options = list(scrollX = TRUE))
+# outliers remove
+train %<>% filter(!(total_bsmt_sf > 3000 &
+                   log(sale_price) < 13))
+
+```
+
+```{r class.source = 'fold-hide'}
+train %>% 
+  ggplot(aes(x = total_bsmt_sf, 
+             y = log(sale_price))) +
+  geom_point() +
+  labs(title = "After removing outliers")
+```
+
+```{r class.source = 'fold-hide'}
+train %>% 
+  ggplot(aes(x = garage_area, 
+             y = log(sale_price))) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Before removing outliers")
+```
+
+
+
+```{r}
+# outliers 
+train %>% 
+  filter(garage_area > 1230) %>%
+  DT::datatable(width = "100%",  
+                options = list(scrollX = TRUE))
+# outliers remove
+train %<>% filter(garage_area <= 1230)
+```
+
+```{r class.source = 'fold-hide'}
+train %>% 
+  ggplot(aes(x = garage_area, 
+             y = log(sale_price))) +
+  geom_point() +
+  labs(title = "After removing outliers")
+```
+다. 
+
+```{r}
+all_data <- bind_rows(train, test)
+names(all_data)[1:10]
+
+```
+
+
+
+```{r}
+housing_recipe <- all_data %>% 
+  recipe(sale_price ~ .) %>%
+  step_rm(id) %>% 
+  step_log(sale_price) %>%
+  step_modeimpute(all_nominal()) %>% 
+  step_dummy(all_nominal()) %>% 
+  step_meanimpute(all_predictors()) %>%
+  step_normalize(all_predictors()) %>% 
+  prep(training = all_data)
+print(housing_recipe)
+```
+
+-   `juice` the all_data2 and split
+
+```{r}
+all_data2 <- juice(housing_recipe)
+```
+
+We are done for preprocessing. Let's split the data set.
+
+```{r}
+train_index <- seq_len(nrow(train))
+train2 <- all_data2[train_index,]
+test2 <- all_data2[-train_index,]
+```
+
+전처리가 다 끝났으면 이제 어떻게 학습할 것인지 알아보자
+
+## 2.1 Elastic net
+
+train set을 validation set으로 다시 분리 시킬 것이다.
+70%는 학습용으로 남겨놓아라. 30%는 평가용!!
+
+```{r}
+set.seed(2021)
+validation_split <- validation_split(train2, prop = 0.7)
+#validation_split <- vfold_cv(train2, v = 10, strata = sale_price)
+# actual split id stored in the following
+# validation_split$splits[[1]]$in_id
+# the whole point is that it's there and trust tidymodels :)
+# head(validation_split$splits[[1]]$in_id)
+``` 
+
+이것이 실제로 어떻게 나눠져 있는지 확인하려면
+
+in_id : 학습 할 때 사용하는 것
+out_id : 평가 할 때 사용하는 것
+
+```{r}
+validation_split$splits[[1]]$in_id
+head(validation_split$splits[[1]]$in_id)
+```
+### 2.1.1 Ridge Regression
+
+이제 tune을 해야하는데 Elastic net에서 $\alpha$(=mixture),penalty(=lambda)
+
+ridge regression: Mixture=0
+
+penalty는 아직 안정했음 : tune 할 것이다.
+
+-   Set the tuning spec
+람다의 후보군을 여러개 남기기 위해서 
+
+*tune_spec*: ridge regression에 penalty는 아직 정해지지 않은 상태
+
+*glmnet*: elastic net을 사용하기 위한 packaages
+
+*param_grid* : 후보가 될 수 있는 람다의 값이 들어있음(하나하나 학습 시킬 것)0이 없고, 1이 무한대인 상태!
+
+*grid_regular(levels = 50)* : 0에서 1까지 중에 균등하게 50개를 뽑은 것
+
+```{r}
+tune_spec <- linear_reg(penalty = tune(),
+                        mixture = 0) %>% #ridge
+  set_engine("glmnet")
+param_grid <- grid_regular(penalty(), levels = 100)
+                           # mixture(),
+                           # levels = list(penalty = 100,
+                           # mixture = 5))
+```
+
+-   Set workflow()
+
+평가하기 위한 모델을 만들기
+
+```{r}
+workflow <- workflow() %>%
+  add_model(tune_spec) %>% 
+  add_formula(sale_price ~ .)
+```
+
+
+-   Tuning $\lambda$ and $\alpha$
+*validation_split*(학습, test데이터)에다가 param_grid를 fitting한다.
+
+어떤 것이 좋은지 평가하는 방식은 rmse(soot mean square error)를 이용하겠다.
+
+-> *tune_result*에 각 람다 값에 대한 퍼포먼스가 담기게 된다. 
+
+```{r}
+library(tictoc)
+doParallel::registerDoParallel()
+tic()
+tune_result <- workflow %>% 
+  tune_grid(validation_split,
+            grid = param_grid,
+            metrics = metric_set(rmse))
+toc()
+```
+*collect_metrics()*: 퍼포먼스가 담긴 것들을 모아봐라
+
+*mean* 값: rmse값(validation에서 나온 것 들의 평균)
+
+우리의 목표: **mean 값이 최소**가 되는 **penalty**값을 구하는 것
+
+```{r}
+tune_result %>% 
+  collect_metrics()
+```
+
+```{r}
+X <- X <- model.matrix(Sale_Price ~ ., train2)[, -1]
+
+Y <- log(ames_train$Sale_Price)
+```
+```{r}
+set.seed(2021)
+index <- sample(1453, 1017)
+
+train2_data <- train2[index,]
+test2_data <- train2[-index,]
+
+dim(train2_data); dim(test2_data)
+
+y <- train2_data[,37]
+y_bar <- mean(y$sale_price)
+y <- y - y_bar
+head(y)
+
+
+X <- train2_data[,-1]
+x_bar <- colMeans(X)
+# X <- sweep(X, 2, x_bar)
+# dim(X)
+
+```
+
+```{r}
+# kable(head(X), format = "markdown", padding=2)
+
+lambda <- 1 
+a <- t(X) %*% as.matrix(X) + lambda *  diag(1, 244) 
+b <- t(X) %*% as.matrix(y) 
+b_hat <- as.numeric(solve(a,b)) 
+sol_ridge <- b_hat 
+names(sol_ridge) <- colnames(train2_data)[-1] 
+
+
+get_ridgeSol <- function(lambda, x_data, y_data) {
+  a <- t(x_data) %*% as.matrix(x_data) + lambda * diag(1, ncol(x_data))
+  b <- t(x_data) %*% as.matrix(y_data)
+  
+  b_hat <- as.numeric(solve(a, b))
+  names(b_hat) <- colnames(x_data) 
+  b_hat
+}
+
+# my_sol <- get_ridgeSol(0, as.matrix(X), y)
+# my_sol
+
+# apply SVD to get d's 
+
+d_vec <- svd(X)$d 
+
+# df function def. 
+
+df_lambda <- function(lambda, dvec){ 
+  sum(dvec^2 / (dvec^2 + lambda))
+}
+
+# generate df values for x axis of coefficient path plot 
+df <- seq(0.05, 1.5, by= 0.05) 
+
+# obtain lambda values corresponding df 
+f <- function(x, y){df_lambda(x, d_vec) - y} 
+g <- function(df){ uniroot(f, c(0, 10^8), tol = 0.0001, y = df)$root} 
+lambda <- sapply(df, g) 
+
+# obtain coefficients w.r.t. lambda 
+beta_hat <- sapply(lambda, get_ridgeSol, x_data = X, y_data = y) 
+datafor_path <- cbind(df, t(beta_hat)) %>% as.data.frame() 
+datafor_path <- rbind(0, datafor_path)
+
+library(tidyr) 
+library(ggplot2) 
+
+# melt data for applying ggplot 
+melted <- melt(datafor_path, id.var = "df") 
+p <- ggplot(data = melted, aes(x = df, y = value, group = variable, color = variable)) + geom_line() 
+
+# text postion & label setting 
+t_position <- rep(14, 13) 
+t_position[(1:6)*2] <- 16 
+varNames <- sort(datafor_path[27, -1]) %>% colnames() 
+
+# Draw coeffiecnts paths of ridge regression 
+p + annotate("text", x = t_position, y = as.numeric(sort(datafor_path[27, -1])), label = varNames)
+
+
+
+```
+

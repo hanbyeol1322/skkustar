@@ -1,0 +1,216 @@
+---
+title: "Tree Building, Prunning"
+description: lec7
+author:
+  - name: hanbyeol
+    url: {}
+date: 05-19-2021
+output:
+  distill::distill_article:
+    self_contained: false
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 어떤 x를 기준으로 나눠야 하는가?(평균 하나로 할 때)
+
+```{r}
+library(magrittr)
+
+x <- -10:10
+y <- x^2
+```
+
+
+which(x < s) : x가 s보다 작은 것들의 위치는 어디니?
+x[group1_index] : 실제로 x가 s보다 작은 것들이 뭔지를 보여줌
+
+예측값으로 사용할 것은 group별로 y값들의 평균임!
+
+```{r}
+s <- -2
+group1_index <- which(x < s)
+group2_index <- which(x >= s)
+
+x[group1_index]
+x[group2_index]
+
+pred_group1 <- mean(y[group1_index])
+pred_group2 <- mean(y[group2_index])
+
+#rss들의 합
+result <- sum((y[group1_index] - pred_group1)^2)+
+    sum((y[group2_index] - pred_group2)^2)
+```
+
+이제 저 것들을 s, x, y의 함수로 만들 것임
+
+```{r}
+rss <- function(s, x, y){
+    group1_index <- which(x < s)
+    group2_index <- which(x >= s)
+    
+    x[group1_index]
+    x[group2_index]
+    
+    pred_group1 <- mean(y[group1_index])
+    pred_group2 <- mean(y[group2_index])
+    
+    result <- sum((y[group1_index] - pred_group1)^2)+
+    sum((y[group2_index] - pred_group2)^2)
+    result
+}
+```
+
+s의 후보군들(?) 정하고 그런 s들로 rss를 구하고자 한다. 
+
+```{r}
+
+# x랑 y를 고정시키고 s만 바뀐다고 생각
+
+rss <- function(s){
+    x <- -10:10
+    y <- x^2
+    
+    group1_index <- which(x < s)
+    group2_index <- which(x >= s)
+    
+    x[group1_index]
+    x[group2_index]
+    
+    pred_group1 <- mean(y[group1_index])
+    pred_group2 <- mean(y[group2_index])
+    
+    result <- sum((y[group1_index] - pred_group1)^2)+
+    sum((y[group2_index] - pred_group2)^2)
+    result
+}
+rss(-2)
+
+s <- seq(-10, 10, by = 0.01)
+rss_result <- sapply(s,rss)
+
+```
+
+sapply(x,y) : x의 모든 원소들을 rss라는 함수에 입력값으로 넣어라
+
+```{r}
+plot(s, rss_result)
+which.min(rss_result)
+s[which.min(rss_result)]
+```
+
+rss_result를 그려라
+which.min(rss_result): rss_result의 몇번째 값이 가장 작은 값인지 확인해보기
+s[which.min(rss_result)] : 그때의 s값은 뭐니?
+
+그럼 그 s값을 기준으로 그룹이 나뉘니까 어떤 값이 예측값으로 사용될 것인지 알 수 있다. 
+
+```{r}
+group1_index <- which(x < -7.99)
+group2_index <- which(x >= -7.99)
+    
+mean(y[group1_index])
+mean(y[group2_index])
+
+plot(x,y)
+abline(h=mean(y[group1_index]))
+abline(h=mean(y[group2_index]))
+abline(v=-7.99)
+
+``` 
+왼쪽 그룹은 81.667로 예측을하고 오른쪽 그룹은 29.16667로 예측한다는 것을 알 수 있다. 
+
+
+# overfitting을 방지하기 위해서는 어째야함?
+
+linear regression에서는 ridge, lasso에 penalty를 부과하는 방법을 사용했음 그럼 tree에서는? -> *prunning*
+
+# R에서 tree하는 방법
+
+
+```{r}
+library(ISLR)
+library(tidyverse)
+library(MASS)
+library(rpart)
+library(rpart.plot) #tree 시각화 하는 패키지
+```
+
+```{r}
+attach(Boston)
+
+Boston %>% dim()
+Boston %>% head()
+```
+
+## decision tree building, Purnning 방법
+
+regression 할때는 lm()에 넣었는데 decision tree에서는 rpart() 함수에 넣음
+
+```{r}
+boston_tree <- rpart(medv ~ .,
+                     data = Boston,
+                     method = "anova", #rpart에서는 anova로 regression을 적용
+                     control = rpart.control(
+                       cp = 0, #anova split일 때: 나눌 때마다 R^2가 증가할텐데, 증가하는 정도를 어느정도로 할것인지
+                       #cp가 높을수록 tree구조가 단순해진다
+                       minbucket = 1, #terminal node가 1개 일 때까지 building
+                       maxdepth = 10))
+rpart.plot(boston_tree)
+```
+
+rpart.control 함수에 자동으로 xval하는 것이 저장되어있음(validation 진행)
+
+```{r}
+class(boston_tree$cptable)
+```
+
+matrix니까
+
+```{r}
+plot(1:166, boston_tree$cptable[,3], type = "l") #cp에 따라서 rel error가 어떻게 바뀌는지(train set에 대한 error값-쭉 떨어짐)
+points(1:166, boston_tree$cptable[,4],type = "l", col="red") #cp에 따라서 cross val가 어떻게 바뀌는지(cross validation에 대한 error값-가장 낮은 시점부터 overfitting이 시작됨)
+
+```
+
+
+### cp값에 따라서 prune을 할 수 있다 
+
+
+```{r}
+printcp(boston_tree) 
+```
+
+spli할수록 rel error가 작아짐(train data에 대해서 학습을 더 잘한다고 볼 수 있음)
+xerror: cross validation error: train data로 학습할 때 xerror가 감소하다가 overfit되는 지점부터는 다시 증가함
+
+우리의 목적: cp중에서 cross validarion이 작고, overfit되지 않은 값을 찾기를 원함
+
+cp중에서 cross validarion이 작은 것이 어디있니: which.min():index를 찾아내고 그때의 cp값을 잡아옴
+
+```{r}
+bestcp <- boston_tree$cptable[which.min(boston_tree$cptable[,"xerror"]),"CP"]
+
+```
+
+
+위에서 정한 cp를 기준으로 prune을 해라.
+
+```{r}
+best_boston_tree <- prune(boston_tree, cp = bestcp)
+rpart.plot(best_boston_tree)
+
+```
+
+
+복잡한 tree에서 prune을 하는 이유: optimal tree를 찾는 것이 목적인데, 
+Gini index와 Entropy를 기준으로 설정하는 것보다 cp를 이용해서 prunning을 하는 방법이 
+좋은 tree를 찾는다고 알려져있음(in textbook)
++남들에게 설명해주기 편함(현상해석을 분석할 때 어덯게 왜 작동하는지)
+-> predict 모델에서는 이유를 설명하기 보다는 잘 추정하는 것이 더 중요함
+
