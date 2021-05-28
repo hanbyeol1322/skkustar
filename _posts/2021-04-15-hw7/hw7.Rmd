@@ -1,7 +1,6 @@
 ---
-title: "hw7"
-description: |
-  A short description of the post.
+title: "Ridge, Lasso penalty"
+description: hw7
 author:
   - name: hanbyeol
     url: {}

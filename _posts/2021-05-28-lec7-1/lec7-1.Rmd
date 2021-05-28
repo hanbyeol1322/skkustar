@@ -1,0 +1,153 @@
+---
+title: "Decision tree building, Pruning 2"
+description: |
+  lec7-1
+author:
+  - name: hanbyeol
+    url: {}
+date: 05-20-2021
+output:
+  distill::distill_article:
+    html_document:
+    fig_caption: true
+    toc: true
+    fig_width: 5
+    fig_height: 4
+    smooth_scroll: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: code
+    editor_options: 
+      markdown: 
+    markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# decision tree building, Purnning 방법
+
+### 패키지 불러오기!
+
+*rpart.plot* : tree 시각화 하는 패키지
+  
+```{r}
+library(ISLR)
+library(tidyverse)
+library(MASS)
+library(rpart)
+library(rpart.plot)
+```
+
+
+### Boston data를 이용할거야!
+
+```{r}
+attach(Boston)
+Boston %>% dim()
+Boston %>% head()
+```
+
+
+### Building decision tree
+
+  - *rpart()*: regression 할때는 *lm()*에 넣었는데 decision tree에서는 *rpart()* 함수에 넣음
+
+  - method : rpart에서는 method="anova"로 regression을 적용
+  
+  - cp : anova split일 때: 나눌 때마다 R^2가 증가할텐데, 증가하는 정도를 어느정도로 할것인지 cp가 높을수록 tree구조가 단순해진다
+  
+  - minbucket : terminal node가 몇 개 일 때까지 building 할거닝?
+
+```{r}
+boston_tree <- rpart(medv ~ .,
+                     data = Boston,
+                     method = "anova", 
+                     control = rpart.control(
+                       cp = 0, 
+                       minbucket = 1, 
+                       maxdepth = 10))
+rpart.plot(boston_tree)
+```
+헤엑 이렇게 가지들이 많을수록 오버피팅의 문제가 있다 .. 그래서 prunig 필요하다!
+
+
+### Pruning
+
+*rpart.control* 함수에 자동으로 xval하는 것이 저장되어있음(validation 진행)
+
+
+```{r}
+class(boston_tree$cptable)
+```
+matrix니까
+
+검정: cp에 따라서 rel error가 어떻게 바뀌는지(train set에 대한 error값-쭉 떨어짐)
+
+빨강: cp에 따라서 cross val가 어떻게 바뀌는지(cross validation에 대한 error값-가장 낮은 시점부터 overfitting이 시작됨)
+
+cp값에 따라서 prune 할 수 있다 
+
+```{r}
+plot(1:166, boston_tree$cptable[,3], type = "l")
+points(1:166, boston_tree$cptable[,4],type = "l", col="red")
+
+printcp(boston_tree)
+```
+
+
+
+split할수록 rel error가 작아짐(train data에 대해서 학습을 더 잘한다고 볼 수 있음)
+
+
+xerror: cross validation error: train data로 학습할 때 xerror가 감소하다가 overfit되는 지점부터는 다시 증가함
+
+
+우리의 목적: cp중에서 cross validarion이 작고, 오버피팅되지 않은 값을 찾기를 원함
+
+
+cp중에서 cross validarion이 작은 것이 어디있니: 
+-> *which.min()*:index를 찾아내고 그때의 cp값을 잡아옴
+
+```{r}
+bestcp <- boston_tree$cptable[which.min(boston_tree$cptable[,"xerror"]),"CP"]
+```
+
+위에서 정한 cp를 기준으로 prune을 해라.
+
+```{r}
+best_boston_tree <- prune(boston_tree, cp = bestcp)
+rpart.plot(best_boston_tree)
+```
+아까보다는 가지 숱이 없어진 것을 볼 수 있다!
+
+
+# 결론! 
+
+복잡한 tree에서 prune을 하는 이유: optimal tree를 찾는 것이 목적인데, 
+
+Gini index와 Entropy를 기준으로 설정하는 것보다 cp를 이용해서 pruning을 하는 방법이 
+
+좋은 tree를 찾는다고 알려져있음(in textbook)
+
++남들에게 설명해주기 편함(현상해석을 분석할 때 어덯게 왜 작동하는지)
+
+-> predict 모델에서는 이유를 설명하기 보다는 잘 추정하는 것이 더 중요함
+
+
+
+
+
+
+
+
+
+
+
+
+
+

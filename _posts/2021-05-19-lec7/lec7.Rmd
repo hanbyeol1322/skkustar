@@ -1,5 +1,5 @@
 ---
-title: "Tree Building, Prunning"
+title: "Decision tree building, Pruning 1"
 description: lec7
 author:
   - name: hanbyeol
