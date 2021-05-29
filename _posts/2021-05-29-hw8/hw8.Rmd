@@ -1,6 +1,6 @@
 ---
 title: "hw8 #1"
-description:
+description: Exponential family
 author:
   - name: hanbyeol
     url: {}
@@ -28,7 +28,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# 1. Exponential family
+# Exponential family
+
 When a random variable $Y$ belongs to exponential family, then the pdf of the random variable can be written as following form:
 
 $$f_{Y}\left(y;\theta,\phi\right)=exp\left[\frac{y\theta-b\left(\theta\right)}{a\left(\phi\right)}+c\left(y,\phi\right)\right]$$
@@ -36,13 +37,13 @@ $$f_{Y}\left(y;\theta,\phi\right)=exp\left[\frac{y\theta-b\left(\theta\right)}{a
 where $a, b, c$ are functions, and the parameter $\theta$ is often referred to as **canonical parameter**.
 
 
-## 1) Express the p.d.f of random variable $Y$
+# 1. Express the p.d.f of random variable $Y$
 
 $$Y \sim Bernulli\left(p\right)$$
 in the above form, which follows the Bernulli $p$:
 $$f_{Y}\left(y;p\right)=p^{y}\left(1-p\right)^{1-y}\mathbb{1}_{\left(y\in\{0,1\}\right)}$$
 
-*sol)*
+### *sol)*
 
 $$
 \begin{aligned}
@@ -59,13 +60,13 @@ $$
 $$\therefore\theta=\log\left(\frac{p}{1-p}\right),\,b\left(\theta\right)=\log\left(1+\exp\left(\theta\right)\right),\,a\left(\phi\right)=1,\,c\left(y,\phi\right)=0$$
 
 
-## 2) Express the p.d.f of random variable $Y$
+# 2. Express the p.d.f of random variable $Y$
 
 $$Y\sim Poisson\left(\lambda\right)$$
 in the above form, which follows the Poisson $\lambda$:
 $$f_{Y}\left(y;\lambda\right)=\frac{\lambda^{y}e^{-\lambda}}{y!}\mathbb{1}_{\left(y\in\mathbb{Z^{+}}\right)}$$
 
-*sol)*
+### *sol)*
 
 $$
 \begin{aligned}
@@ -80,12 +81,12 @@ $$\therefore\theta=\log\lambda,\,b\left(\theta\right)=\exp\left(\theta\right),\,
 
 
 
-## 3) We have learned that the link function in GLM is a function $g$ which connects the linear components with the $\mu=\mathbb{E}[Y]$. If link function $g$ satisfies the following condition, then $g$ is called a *canonical link function*.
+# 3. We have learned that the link function in GLM is a function $g$ which connects the linear components with the $\mu=\mathbb{E}[Y]$. If link function $g$ satisfies the following condition, then $g$ is called a *canonical link function*.
 
 $$\theta = g(\mu)$$
 Verify the logit link for the logistic regression  and the log link for the poisson regression are the canonical link functions.
 
-*sol)*
+### *sol)*
 
 by 1), 
 

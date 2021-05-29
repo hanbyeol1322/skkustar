@@ -1,0 +1,105 @@
+---
+title: "hw8 #2"
+description: Maximum Likelihood Estimator of Poisson Regression
+author:
+  - name: hanbyeol
+    url: {}
+date: 05-20-2021
+output:
+  distill::distill_article:
+    html_document:
+    fig_caption: true
+    toc: true
+    fig_width: 5
+    fig_height: 4
+    smooth_scroll: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    editor_options: 
+      markdown: 
+    markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Maximum Likelihood Estimator of Poisson Regression
+
+# 1. Calculate the coefficients by using the following code
+
+```{r}
+library(tidyverse)
+example_data <- as.tibble(read.csv("./example.csv"))
+example_data %>% head()
+example_data %>% dim()
+
+```
+
+```{r}
+model <- glm(Claims ~ Gender + Territory,
+family = poisson(link=log), data = example_data)
+
+model$coefficients
+```
+
+# 2. Find the coefficients of Poisson regression above using an user define R function via gradient descent algorithm. 
+
+• Define Likelihood and Loglikelihood function
+
+```{r}
+set.seed(2021)
+beta <- rnorm(3)
+sigma_f <- function(x){exp(x)}
+nll <- function(beta){
+    y <- example_data$Claims
+    pi_vec <- sigma_f(matrix(cbind(1,
+                                   example_data$Gender,
+                                   example_data$Territory),
+            ncol = 3) %*% matrix(beta, nrow = 3))
+    -sum(y*log(pi_vec)-pi_vec-log(factorial(y)))
+}
+nll(beta)
+
+```
+
+• Calculate gradient of Loglikelihood function with repect to $\beta$.
+
+```{r}
+grad_nll <- function(beta){
+    y <- example_data$Claims
+    xbeta <- matrix(cbind(1, example_data$Gender,
+                          example_data$Territory),
+                          ncol=3) %*% beta
+    pi_vec <- sigma_f(xbeta)
+    -colSums(as.vector(y-pi_vec) * 
+                 matrix(cbind(1, example_data$Gender,
+                              example_data$Territory), ncol=3))
+}
+grad_nll(beta)
+
+```
+
+```{r}
+set.seed(2021)
+beta <- rnorm(3)
+iter_n <- 1
+improve <- 1
+conv_threshold <- 1e-5
+max_n <- 10000
+result <- matrix(0, nrow = max_n, ncol = 3)
+while((improve > conv_threshold) & (iter_n <= max_n)){
+    beta_new <- beta-0.001 * grad_nll(beta) 
+    improve <- abs(nll(beta)-nll(beta_new))
+    result[iter_n,] <- beta_new
+    beta <- beta_new
+    iter_n <- iter_n + 1
+}
+
+result[iter_n-1,]
+
+model$coefficients
+```
