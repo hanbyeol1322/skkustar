@@ -1,0 +1,109 @@
+---
+title: "hw8 #1"
+description:
+author:
+  - name: hanbyeol
+    url: {}
+date: 05-20-2021
+output:
+  distill::distill_article:
+    html_document:
+    fig_caption: true
+    toc: true
+    fig_width: 5
+    fig_height: 4
+    smooth_scroll: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: code
+    editor_options: 
+      markdown: 
+    markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Exponential family
+When a random variable $Y$ belongs to exponential family, then the pdf of the random variable can be written as following form:
+
+$$f_{Y}\left(y;\theta,\phi\right)=exp\left[\frac{y\theta-b\left(\theta\right)}{a\left(\phi\right)}+c\left(y,\phi\right)\right]$$
+
+where $a, b, c$ are functions, and the parameter $\theta$ is often referred to as **canonical parameter**.
+
+
+## 1) Express the p.d.f of random variable $Y$
+
+$$Y \sim Bernulli\left(p\right)$$
+in the above form, which follows the Bernulli $p$:
+$$f_{Y}\left(y;p\right)=p^{y}\left(1-p\right)^{1-y}\mathbb{1}_{\left(y\in\{0,1\}\right)}$$
+
+*sol)*
+
+$$
+\begin{aligned}
+f_{Y}\left(y;p\right)&=p^{y}\left(1-p\right)^{1-y}\\
+&=\exp\left\{ log\left(p^{y}\left(1-p\right)^{1-y}\right)\right\}\\
+&=\exp\left\{ y\,\log p+\left(1-y\right)\log\left(1-p\right)\right\}\\
+&=\exp\left\{ y\,\log\left(\frac{p}{1-p}\right)+\log\left(1-p\right)\right\}\left(\mathrm{\theta=\log\left(\frac{p}{1-p}\right)}\right)\\
+&=\exp\left\{ y\,\log\left(\frac{p}{1-p}\right)-\log\left(\frac{1}{1-p}\right)\right\}\\
+&=\exp\left\{ y\,\log\left(\frac{p}{1-p}\right)-\log\left(1+\exp\left(\log\left(\frac{p}{1-p}\right)\right)\right)\right\}\\
+&=\exp\left\{ y\,\theta-\log\left(1+\exp\left(\theta\right)\right)\right\} 
+\end{aligned}
+$$
+
+$$\therefore\theta=\log\left(\frac{p}{1-p}\right),\,b\left(\theta\right)=\log\left(1+\exp\left(\theta\right)\right),\,a\left(\phi\right)=1,\,c\left(y,\phi\right)=0$$
+
+
+## 2) Express the p.d.f of random variable $Y$
+
+$$Y\sim Poisson\left(\lambda\right)$$
+in the above form, which follows the Poisson $\lambda$:
+$$f_{Y}\left(y;\lambda\right)=\frac{\lambda^{y}e^{-\lambda}}{y!}\mathbb{1}_{\left(y\in\mathbb{Z^{+}}\right)}$$
+
+*sol)*
+
+$$
+\begin{aligned}
+f_{Y}\left(y;\lambda\right)&=\frac{\lambda^{y}e^{-\lambda}}{y!}\\
+&=\exp\left\{ \log\left(\frac{\lambda^{y}e^{-\lambda}}{y!}\right)\right\}\\
+&=\exp\left\{ y\,\log\lambda-\exp\left(\log\lambda\right)-\log\left(y!\right)\right\}\\
+&=\exp\left\{ y\theta-\exp\left(\theta\right)-\log\left(y!\right)\right\}
+\end{aligned}
+$$
+
+$$\therefore\theta=\log\lambda,\,b\left(\theta\right)=\exp\left(\theta\right),\,a(\phi)=1,\,c(y,\phi)=-\log(y!)$$
+
+
+
+## 3) We have learned that the link function in GLM is a function $g$ which connects the linear components with the $\mu=\mathbb{E}[Y]$. If link function $g$ satisfies the following condition, then $g$ is called a *canonical link function*.
+
+$$\theta = g(\mu)$$
+Verify the logit link for the logistic regression  and the log link for the poisson regression are the canonical link functions.
+
+*sol)*
+
+by 1), 
+
+$$\theta=\log\left(\frac{p}{1-p}\right),\,b\left(\theta\right)=\log\left(1+\exp\left(\theta\right)\right)$$
+$$\mu=p\:\text{이므로 p로 정리하면}$$
+$$e^{\theta}=\frac{p}{1-p}\,\,\,\rightarrow\,\,\, p=\frac{e^{\theta}}{1+e^{\theta}}=b'(\theta)=\mu$$
+$$\theta=g(\mu)=(b')^{-1}(\mu)$$
+$$\rightarrow\,e^{\theta}=\frac{\mu}{1-\mu}$$
+
+$$\therefore\,\theta=\log(\frac{\mu}{1-\mu})$$
+$$logit\,\,link\::\theta=\log(\frac{\mu}{1-\mu})\Longrightarrow g(\mu):canoncial\,link\,function$$
+
+
+by 2), 
+
+$$\theta=\log\lambda,\,b\left(\theta\right)=e^{\theta}$$
+$$\mu=\lambda\,\text{이므로}\,\,\,\,\lambda\text{로 정리하면 }$$
+$$\mu=e^{\theta}$$
+$$\therefore\,\theta=\log{\mu}$$
+
+$$logit\,\,link\::\theta=\log{\mu}\Longrightarrow g(\mu):canoncial\,link\,function$$

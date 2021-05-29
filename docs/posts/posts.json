@@ -36,6 +36,23 @@
     "input_file": {}
   },
   {
+    "path": "posts/2021-05-29-hw8/",
+    "title": "hw8 #1",
+    "description": {},
+    "author": [
+      {
+        "name": "hanbyeol",
+        "url": {}
+      }
+    ],
+    "date": "2021-05-20",
+    "categories": [],
+    "contents": "\n\nContents\n1. Exponential family\n1) Express the p.d.f of random variable \\(Y\\)\n2) Express the p.d.f of random variable \\(Y\\)\n3) We have learned that the link function in GLM is a function \\(g\\) which connects the linear components with the \\(\\mu=\\mathbb{E}[Y]\\). If link function \\(g\\) satisfies the following condition, then \\(g\\) is called a canonical link function.\n\n\n1. Exponential family\nWhen a random variable \\(Y\\) belongs to exponential family, then the pdf of the random variable can be written as following form:\n\\[f_{Y}\\left(y;\\theta,\\phi\\right)=exp\\left[\\frac{y\\theta-b\\left(\\theta\\right)}{a\\left(\\phi\\right)}+c\\left(y,\\phi\\right)\\right]\\]\nwhere \\(a, b, c\\) are functions, and the parameter \\(\\theta\\) is often referred to as canonical parameter.\n1) Express the p.d.f of random variable \\(Y\\)\n\\[Y \\sim Bernulli\\left(p\\right)\\] in the above form, which follows the Bernulli \\(p\\): \\[f_{Y}\\left(y;p\\right)=p^{y}\\left(1-p\\right)^{1-y}\\mathbb{1}_{\\left(y\\in\\{0,1\\}\\right)}\\]\nsol)\n\\[\n\\begin{aligned}\nf_{Y}\\left(y;p\\right)&=p^{y}\\left(1-p\\right)^{1-y}\\\\\n&=\\exp\\left\\{ log\\left(p^{y}\\left(1-p\\right)^{1-y}\\right)\\right\\}\\\\\n&=\\exp\\left\\{ y\\,\\log p+\\left(1-y\\right)\\log\\left(1-p\\right)\\right\\}\\\\\n&=\\exp\\left\\{ y\\,\\log\\left(\\frac{p}{1-p}\\right)+\\log\\left(1-p\\right)\\right\\}\\left(\\mathrm{\\theta=\\log\\left(\\frac{p}{1-p}\\right)}\\right)\\\\\n&=\\exp\\left\\{ y\\,\\log\\left(\\frac{p}{1-p}\\right)-\\log\\left(\\frac{1}{1-p}\\right)\\right\\}\\\\\n&=\\exp\\left\\{ y\\,\\log\\left(\\frac{p}{1-p}\\right)-\\log\\left(1+\\exp\\left(\\log\\left(\\frac{p}{1-p}\\right)\\right)\\right)\\right\\}\\\\\n&=\\exp\\left\\{ y\\,\\theta-\\log\\left(1+\\exp\\left(\\theta\\right)\\right)\\right\\} \n\\end{aligned}\n\\]\n\\[\\therefore\\theta=\\log\\left(\\frac{p}{1-p}\\right),\\,b\\left(\\theta\\right)=\\log\\left(1+\\exp\\left(\\theta\\right)\\right),\\,a\\left(\\phi\\right)=1,\\,c\\left(y,\\phi\\right)=0\\]\n2) Express the p.d.f of random variable \\(Y\\)\n\\[Y\\sim Poisson\\left(\\lambda\\right)\\] in the above form, which follows the Poisson \\(\\lambda\\): \\[f_{Y}\\left(y;\\lambda\\right)=\\frac{\\lambda^{y}e^{-\\lambda}}{y!}\\mathbb{1}_{\\left(y\\in\\mathbb{Z^{+}}\\right)}\\]\nsol)\n\\[\n\\begin{aligned}\nf_{Y}\\left(y;\\lambda\\right)&=\\frac{\\lambda^{y}e^{-\\lambda}}{y!}\\\\\n&=\\exp\\left\\{ \\log\\left(\\frac{\\lambda^{y}e^{-\\lambda}}{y!}\\right)\\right\\}\\\\\n&=\\exp\\left\\{ y\\,\\log\\lambda-\\exp\\left(\\log\\lambda\\right)-\\log\\left(y!\\right)\\right\\}\\\\\n&=\\exp\\left\\{ y\\theta-\\exp\\left(\\theta\\right)-\\log\\left(y!\\right)\\right\\}\n\\end{aligned}\n\\]\n\\[\\therefore\\theta=\\log\\lambda,\\,b\\left(\\theta\\right)=\\exp\\left(\\theta\\right),\\,a(\\phi)=1,\\,c(y,\\phi)=-\\log(y!)\\]\n3) We have learned that the link function in GLM is a function \\(g\\) which connects the linear components with the \\(\\mu=\\mathbb{E}[Y]\\). If link function \\(g\\) satisfies the following condition, then \\(g\\) is called a canonical link function.\n\\[\\theta = g(\\mu)\\] Verify the logit link for the logistic regression and the log link for the poisson regression are the canonical link functions.\nsol)\nby 1),\n\\[\\theta=\\log\\left(\\frac{p}{1-p}\\right),\\,b\\left(\\theta\\right)=\\log\\left(1+\\exp\\left(\\theta\\right)\\right)\\] \\[\\mu=p\\:\\text{이므로 p로 정리하면}\\] \\[e^{\\theta}=\\frac{p}{1-p}\\,\\,\\,\\rightarrow\\,\\,\\, p=\\frac{e^{\\theta}}{1+e^{\\theta}}=b'(\\theta)=\\mu\\] \\[\\theta=g(\\mu)=(b')^{-1}(\\mu)\\] \\[\\rightarrow\\,e^{\\theta}=\\frac{\\mu}{1-\\mu}\\]\n\\[\\therefore\\,\\theta=\\log(\\frac{\\mu}{1-\\mu})\\] \\[logit\\,\\,link\\::\\theta=\\log(\\frac{\\mu}{1-\\mu})\\Longrightarrow g(\\mu):canoncial\\,link\\,function\\]\nby 2),\n\\[\\theta=\\log\\lambda,\\,b\\left(\\theta\\right)=e^{\\theta}\\] \\[\\mu=\\lambda\\,\\text{이므로}\\,\\,\\,\\,\\lambda\\text{로 정리하면 }\\] \\[\\mu=e^{\\theta}\\] \\[\\therefore\\,\\theta=\\log{\\mu}\\]\n\\[logit\\,\\,link\\::\\theta=\\log{\\mu}\\Longrightarrow g(\\mu):canoncial\\,link\\,function\\]\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-29T07:04:20+00:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-05-19-lec7/",
     "title": "Decision tree building, Pruning 1",
     "description": "lec7",
