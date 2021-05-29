@@ -4,7 +4,7 @@ description: lec8
 author:
   - name: hanbyeol
     url: {}
-date: 05-20-2021
+date: 04-16-2021
 output:
   distill::distill_article:
     html_document:
