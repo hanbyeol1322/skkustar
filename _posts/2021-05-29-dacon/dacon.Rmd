@@ -1,0 +1,52 @@
+---
+title: "신용카드 사용자 연체 예측 AI 경진대회"
+description: stacking
+author:
+  - name: hanbyeol
+    url: {}
+date: 05-20-2021
+output:
+  distill::distill_article:
+    html_document:
+    fig_caption: true
+    toc: true
+    toc_float: yes
+    fig_width: 5
+    fig_height: 4
+    smooth_scroll: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: code
+    editor_options: 
+      markdown: 
+    markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidymodels)
+library(tidyverse)
+library(magrittr)
+library(skimr)
+library(kknn)
+library(stacks)
+library(glmnet)
+library(xgboost)
+library(kernlab)
+library(keras)
+library(ranger)
+library(purrr) ; library(magrittr) ; library(MASS)
+```
+
+keras를 돌리기 위해서 설치필요, 아나콘다 & 텐서플로우 install.packages("tensorflow") require(tensorflow) install.packages("curl") install_tensorflow()
+
+# Data
+
+## 파일경로
+
+file_path \<- "\~/21as/dacon/dacon_input" files \<- list.files(file_path) files
