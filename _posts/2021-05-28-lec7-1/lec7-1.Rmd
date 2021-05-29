@@ -1,7 +1,6 @@
 ---
 title: "Decision tree building, Pruning 2"
-description: |
-  lec7-1
+description: lec7-1
 author:
   - name: hanbyeol
     url: {}
